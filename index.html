@@ -16,13 +16,13 @@
   <meta property="og:url"         content="https://intunes.it" />
   <meta property="og:site_name"   content="intunes.IT" />
   <meta property="og:title"       content="It's Intune, not Intunes." />
-  <meta property="og:description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes — the home of gentle correction and cheeky clarity." />
+  <meta property="og:description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes. Your friendly home of gentle correction and cheeky clarity." />
   <meta property="og:image"       content="https://intunes.it/images/Bart-ItsIntune-notIntunes.png" />
 
   <!-- Twitter / X Card -->
   <meta name="twitter:card"        content="summary_large_image" />
   <meta name="twitter:title"       content="It's Intune, not Intunes." />
-  <meta name="twitter:description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes — the home of gentle correction and cheeky clarity." />
+  <meta name="twitter:description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes. Your friendly home of gentle correction and cheeky clarity." />
   <meta name="twitter:image"       content="https://intunes.it/images/Bart-ItsIntune-notIntunes.png" />
 
   <!-- Structured data: FAQ rich result -->
@@ -36,7 +36,7 @@
         "name": "What is Microsoft Intune?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Microsoft Intune is a cloud-based MDM/MAM service to manage and secure devices, apps, and data. It handles policies, compliance, enrollment, and remediation — it is an enterprise platform, not a media player."
+          "text": "Microsoft Intune is a cloud-based MDM/MAM service to manage and secure devices, apps, and data. It handles policies, compliance, enrollment, and remediation. It is an enterprise platform, not a media player."
         }
       },
       {
@@ -332,7 +332,7 @@
       <div>
         <div class="psa-bar">🚨 Public Service Announcement &nbsp;·&nbsp; for the love of endpoints</div>
         <h1>It's <span class="mark-good">Intune</span>,<br>not <span class="mark-bad">Intunes</span>.</h1>
-        <p class="hero-body"><strong>Confused?</strong><br>You're not alone. People keep saying "Microsoft Intunes" because of Apple's iTunes. But they couldn't be more different — one is a cloud-based device management platform that keeps your corporate fleet secure and compliant; the other made you burn mix CDs in 2006. Every time someone types "Intunes" in a support ticket, an IT admin loses a year of their life.</p>
+        <p class="hero-body"><strong>Confused?</strong><br>You're not alone. People keep saying "Microsoft Intunes" because of Apple's iTunes. But they couldn't be more different. One is a cloud-based device management platform that keeps your corporate fleet secure and compliant, and the other made you burn mix CDs in 2006. Every time someone types "Intunes" in a support ticket, an IT admin loses a year of their life.</p>
         <div class="cta">
           <button class="btn btn-primary" id="pledgeBtn">I solemnly swear to say "Microsoft Intune"</button>
           <button class="btn btn-secondary" id="copyBtn">Copy the correct name</button>
@@ -349,8 +349,8 @@
       <article class="card wide">
         <h2 class="card-title">Quick guide for the confused</h2>
         <ul style="padding-left:18px; color:var(--ink-muted); line-height:1.8;">
-          <li><strong style="color:var(--ink)">Microsoft Intune</strong> — Cloud service to <em>manage</em> and <em>secure</em> devices, apps, and data. Think policies, compliance, enrollment, remediation, happy security people.</li>
-          <li><strong style="color:var(--ink)">Apple iTunes</strong> — A classic media app to <em>play</em>, <em>purchase</em>, and <em>sync</em> music and videos. Great for nostalgia, not so great for deploying a configuration profile.</li>
+          <li><strong style="color:var(--ink)">Microsoft Intune</strong> is a cloud service that <em>manages</em> and <em>secures</em> devices, apps, and data. Think policies, compliance, enrollment, remediation, and a lot of happy security people.</li>
+          <li><strong style="color:var(--ink)">Apple iTunes</strong> is a classic media app for <em>playing</em>, <em>purchasing</em>, and <em>syncing</em> music and videos. Great for nostalgia, not so great for deploying a configuration profile.</li>
         </ul>
         <p style="margin-top:12px; font-size:13px; color:var(--ink-muted)">Both names sound nearly identical and both come from tech giants — but the similarity ends there. Getting the name right matters in practice: a support ticket or Copilot prompt referencing "Intunes" can land in the wrong context and waste everyone's time.</p>
         <div class="divider"></div>
@@ -549,6 +549,7 @@
     function openCertModal() {
       document.getElementById('certModal').classList.add('open');
       setTimeout(() => document.getElementById('certName').focus(), 80);
+      launchConfetti();
     }
     function closeCertModal() {
       document.getElementById('certModal').classList.remove('open');
