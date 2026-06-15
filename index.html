@@ -396,14 +396,17 @@
     document.getElementById('certName').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('downloadCertBtn').click(); });
     document.getElementById('downloadCertBtn').addEventListener('click', () => {
       const name = document.getElementById('certName').value.trim() || 'An Anonymous Hero';
-      generateCertificate(name);
+      const win = window.open('', '_blank');
+      if (!win) { alert('Popups are blocked — please allow popups for this site and try again.'); return; }
+      win.document.write(buildCertHtml(name));
+      win.document.close();
     });
 
     function escapeHtml(s) {
       return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
-    function generateCertificate(name) {
+    function buildCertHtml(name) {
       const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
       const safeName = escapeHtml(name);
       const html = `<!doctype html>
@@ -533,10 +536,7 @@
 </body>
 </html>`;
 
-      const blob = new Blob([html], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      window.open(url, '_blank');
-      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      return html;
     }
 
   </script>
