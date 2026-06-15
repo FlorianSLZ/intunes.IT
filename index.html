@@ -3,167 +3,265 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>intunes.IT - It's Intune, not Intunes.</title>
+  <title>intunes.IT — It's Intune, not Intunes.</title>
   <meta name="description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes. Welcome to intunes.IT, the home of gentle correction and cheeky clarity." />
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <link rel="icon" type="image/x-icon" href="images/intune-warning.ico">
   <meta property="og:image" content="https://intunes.it/images/Bart-ItsIntune-notIntunes.png" />
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <style>
-    :root{
-      --bg: #0f1226;
-      --card:#15183a;
-      --ink:#e9ecff;
-      --muted:#b6b9d8;
-      --accent:#7c5cff;
-      --accent-2:#23d2ff;
-      --good:#00d192;
-      --bad:#ff6b6b;
-      --shadow: 0 20px 60px rgba(0,0,0,.35);
-      --radius: 18px;
+    /* ── Fluent Design tokens ─────────────────────────────────────────── */
+    :root {
+      --primary:          #0078D4;
+      --primary-hover:    #106EBE;
+      --primary-pressed:  #005A9E;
+      --ink:              #201F1E;
+      --ink-muted:        #605E5C;
+      --ink-subdued:      #A19F9D;
+      --canvas:           #FAF9F8;
+      --surface-1:        #FFFFFF;
+      --surface-2:        #F3F2F1;
+      --surface-3:        #EDEBE9;
+      --border:           #E1DFDD;
+      --border-strong:    #8A8886;
+      --success:          #107C10;
+      --warning:          #FFB900;
+      --danger:           #D13438;
+      --shadow-card:      0 1.6px 3.6px rgba(0,0,0,.13), 0 0.3px 0.9px rgba(0,0,0,.11);
+      --shadow-elevated:  0 6.4px 14.4px rgba(0,0,0,.13), 0 1.2px 3.6px rgba(0,0,0,.11);
+      --shadow-flyout:    0 25.6px 57.6px rgba(0,0,0,.22), 0 4.8px 14.4px rgba(0,0,0,.18);
+      --radius-sm:  2px;
+      --radius-md:  4px;
+      --radius-lg:  8px;
+      --easing: cubic-bezier(0.1, 0.9, 0.2, 1);
+      /* aliases used by existing JS */
+      --good: var(--success);
+      --bad:  var(--danger);
     }
 
-    html,body{height:100%}
-    body{
-      margin:0;
-      font:16px/1.5 ui-sans-serif, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color:var(--ink);
-      background:
-        radial-gradient(1200px 600px at 10% -10%, rgba(124,92,255,.25), transparent 60%),
-        radial-gradient(1200px 600px at 110% -20%, rgba(35,210,255,.25), transparent 60%),
-        linear-gradient(180deg, var(--bg), var(--bg));
-      overflow-x: hidden;
+    /* ── Reset & base ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font: 14px/1.5 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      color: var(--ink);
+      background: var(--canvas);
     }
-    .container{max-width:1100px;margin:0 auto;padding:24px}
-    header{
-      position:sticky; top:0; z-index:50; backdrop-filter:saturate(150%) blur(8px);
-      background: color-mix(in oklab, var(--bg), transparent 50%);
-      border-bottom:1px solid color-mix(in oklab, var(--ink), transparent 88%);
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Layout ───────────────────────────────────────────────────────── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Header / command bar ─────────────────────────────────────────── */
+    header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255,255,255,.88);
+      backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid var(--border);
     }
-    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0}
-    .logo{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.4px}
-    .logo img{width:40px;height:40px; border-radius:8px; box-shadow:var(--shadow)}
-
-    .hero{display:grid; grid-template-columns: 1.2fr .8fr; gap:28px; align-items:center; padding:72px 0 48px}
-    @media (max-width: 900px){ .hero{grid-template-columns: 1fr; padding:48px 0 20px} }
-
-    h1{font-size: clamp(48px, 6vw, 72px); line-height:1.05; margin:16px 0; letter-spacing:-.8px}
-    .tag{display:inline-flex; align-items:center; gap:8px; font-size:16px; font-weight:700; color:var(--accent-2);
-      background: color-mix(in oklab, var(--accent-2), transparent 85%);
-      padding:10px 16px; border-radius:999px; box-shadow: var(--shadow)}
-
-    .hero p{font-size:18px; max-width:550px; margin-top:12px; color:var(--muted)}
-
-    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:24px}
-    .btn{
-      appearance:none; border:0; border-radius:14px; padding:14px 18px; font-weight:700;
-      color:#0b0b16; background: linear-gradient(100deg, var(--accent), var(--accent-2));
-      box-shadow: var(--shadow); cursor:pointer; font-size:15px;
+    .nav { display: flex; align-items: center; height: 48px; }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 15px; font-weight: 600; color: var(--ink);
     }
-    .btn.secondary{background:transparent;color:var(--ink);border:1px solid color-mix(in oklab, var(--ink), transparent 80%)}
-    .btn:active{transform:translateY(1px)}
+    .logo img { width: 24px; height: 24px; border-radius: var(--radius-sm); }
 
-    .btn.correct {
-      background: linear-gradient(135deg, color-mix(in oklab, var(--good), transparent 15%), color-mix(in oklab, var(--good), transparent 35%));
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(0, 209, 146, 0.3);
+    /* ── Hero ─────────────────────────────────────────────────────────── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 48px;
+      align-items: center;
+      padding: 52px 0 48px;
     }
-
-    .btn.wrong {
-      background: linear-gradient(135deg, color-mix(in oklab, var(--bad), transparent 15%), color-mix(in oklab, var(--bad), transparent 35%));
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; padding: 36px 0 28px; }
+      .hero-img { display: none; }
+    }
+    .hero-img img {
+      width: 300px; height: auto; display: block;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-elevated);
     }
 
-    .btn.correct:active,
-    .btn.wrong:active {
-      transform: translateY(1px);
-      opacity: 0.85;
+    /* PSA info bar (MessageBar / info style) */
+    .psa-bar {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 600; letter-spacing: .2px;
+      color: var(--primary);
+      background: #EBF3FC;
+      border-left: 3px solid var(--primary);
+      padding: 6px 12px; border-radius: var(--radius-sm);
+      margin-bottom: 20px;
     }
 
-
-
-    .card{background:var(--card); border:1px solid color-mix(in oklab, var(--ink), transparent 86%);
-      border-radius: var(--radius); padding:18px; box-shadow: var(--shadow)}
-
-    .panel{display:grid; grid-template-columns: repeat(12, 1fr); gap:18px}
-    .panel > *{grid-column: span 6}
-    .panel .wide{grid-column: span 12}
-    @media (max-width: 900px){ .panel > *{grid-column: span 12} }
-
-    .bubbleheader{
-      background: linear-gradient(120deg, color-mix(in oklab, #02f52a, transparent 50%), color-mix(in oklab, var(--accent-2), transparent 50%));
-      border-radius: 999px; padding:14px 20px; color: #0c160c; font-weight:800; font-size:46px; white-space:nowrap; display:inline-block; width:auto;
+    h1 {
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -.01em;
+      color: var(--ink);
+      margin-bottom: 16px;
     }
-    
-    .bubble{
-      background: linear-gradient(120deg, color-mix(in oklab, var(--accent), transparent 50%), color-mix(in oklab, var(--accent-2), transparent 50%));
-      border-radius: 999px; padding:14px 20px; color: #0c0c16; font-weight:800; font-size:22px; white-space:nowrap; display:inline-block; width:auto;
+    .mark-good {
+      background: var(--primary); color: #fff;
+      padding: 2px 14px; border-radius: var(--radius-sm);
+      display: inline-block;
     }
-    .marquee{ display:flex; overflow:hidden; }
-    .marquee-track{ display:flex; gap:18px; animation: scroll 20s linear infinite; }
-    @keyframes scroll { from{ transform: translateX(0) } to{ transform: translateX(-100%) } }
+    .mark-bad {
+      background: var(--danger); color: #fff;
+      padding: 2px 14px; border-radius: var(--radius-sm);
+      display: inline-block;
+    }
 
-    .mini{font-size:12px; color:var(--muted)}
+    .hero-body {
+      font-size: 16px; line-height: 1.65; color: var(--ink-muted);
+      max-width: 520px; margin-bottom: 24px;
+    }
+    .hero-body strong { color: var(--ink); }
 
-    .grid-badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px}
-    .badge{border:1px solid color-mix(in oklab, var(--ink), transparent 82%); border-radius:12px; padding:10px 12px; display:flex; align-items:center; gap:10px}
+    /* ── Buttons ──────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      height: 32px; padding: 0 20px;
+      border-radius: var(--radius-md); border: 1px solid transparent;
+      font: 600 14px/1 'Segoe UI', sans-serif;
+      cursor: pointer; white-space: nowrap;
+      transition: background 100ms var(--easing), border-color 100ms var(--easing);
+    }
+    .btn:active { transform: translateY(1px); }
 
-    .quiz h3{margin:0 0 10px}
-    .quiz .q{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px; border-radius:12px; border:1px solid color-mix(in oklab, var(--ink), transparent 86%)}
-    .pill{padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; letter-spacing:.3px}
+    .btn-primary  { background: var(--primary);  color: #fff; border-color: var(--primary); }
+    .btn-primary:hover  { background: var(--primary-hover);   border-color: var(--primary-hover); }
+    .btn-primary:active { background: var(--primary-pressed); border-color: var(--primary-pressed); }
 
-    /* pulseWrongPage  */
+    .btn-secondary  { background: var(--surface-1); color: var(--ink); border-color: var(--border-strong); }
+    .btn-secondary:hover  { background: var(--surface-2); }
+    .btn-secondary:active { background: var(--surface-3); }
+
+    .btn-success  { background: var(--success); color: #fff; border-color: var(--success); }
+    .btn-success:hover  { background: #0a6a0a; border-color: #0a6a0a; }
+    .btn-success:active { background: #085708; }
+
+    .btn-danger   { background: var(--danger);  color: #fff; border-color: var(--danger); }
+    .btn-danger:hover   { background: #b02a2e; border-color: #b02a2e; }
+    .btn-danger:active  { background: #8f2124; }
+
+    .cta { display: flex; gap: 8px; flex-wrap: wrap; }
+    #pledgeMsg { font-size: 12px; color: var(--ink-muted); margin-top: 8px; min-height: 18px; }
+
+    /* ── Panel grid ───────────────────────────────────────────────────── */
+    .panel { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; margin-bottom: 32px; }
+    .panel > * { grid-column: span 6; }
+    .panel .wide { grid-column: span 12; }
+    @media (max-width: 900px) { .panel > * { grid-column: span 12; } }
+
+    /* ── Card ─────────────────────────────────────────────────────────── */
+    .card {
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+    }
+    .card-title { font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
+
+    /* ── Divider ──────────────────────────────────────────────────────── */
+    .divider { border: none; height: 1px; background: var(--border); margin: 16px 0; }
+
+    /* ── Marquee ──────────────────────────────────────────────────────── */
+    .marquee { display: flex; overflow: hidden; gap: 8px; }
+    .marquee-track { display: flex; gap: 8px; animation: scroll 22s linear infinite; flex-shrink: 0; }
+    @keyframes scroll { from { transform: translateX(0) } to { transform: translateX(-100%) } }
+    .bubble {
+      background: var(--primary); color: #fff;
+      border-radius: 9999px; padding: 5px 14px;
+      font-size: 13px; font-weight: 600; white-space: nowrap; display: inline-block;
+    }
+
+    /* ── Fact badges ──────────────────────────────────────────────────── */
+    .grid-badges { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; }
+    .badge {
+      border: 1px solid var(--border); border-radius: var(--radius-md);
+      padding: 10px 12px; display: flex; align-items: flex-start; gap: 10px;
+    }
+    .badge strong { font-size: 12px; font-weight: 600; color: var(--ink); display: block; margin-bottom: 2px; }
+    .mini { font-size: 12px; color: var(--ink-muted); }
+
+    /* ── Quiz ─────────────────────────────────────────────────────────── */
+    .quiz-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 12px 14px; border-radius: var(--radius-md);
+      border: 1px solid var(--border); background: var(--surface-2);
+      margin: 12px 0;
+    }
+    #quizWord { font-size: 18px; font-weight: 600; color: var(--ink); }
+    .quiz-actions { display: flex; gap: 8px; }
+    #quizFeedback { font-size: 12px; min-height: 16px; margin-top: 4px; }
+    .streak-bar { font-size: 12px; color: var(--primary); font-weight: 600; min-height: 16px; margin-top: 2px; }
+
+    /* ── Chips (Hall of misspellings) ─────────────────────────────────── */
+    .ghost-btn {
+      border: 1px dashed var(--border-strong); border-radius: 9999px;
+      padding: 4px 12px; font-size: 12px; color: var(--ink-muted);
+      background: transparent; cursor: pointer; font-family: inherit;
+      transition: background 100ms, color 100ms, border-color 100ms;
+    }
+    .ghost-btn:hover { background: var(--surface-2); color: var(--ink); }
+
+    /* ── Wrong-answer page flash ──────────────────────────────────────── */
     @keyframes pulseWrongPage {
       0%   { opacity: 0; }
-      25%  { opacity: 0.35; } /* strong thump */
+      25%  { opacity: .35; }
       50%  { opacity: 0; }
-      75%  { opacity: 0.22; } /* lighter thump */
+      75%  { opacity: .22; }
       100% { opacity: 0; }
     }
-
-    /* Full-page red overlay that sits above everything but ignores clicks */
     body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: var(--bad);         /* uses your palette (#ff6b6b) */
-      opacity: 0;
-      pointer-events: none;
-      z-index: 9999;                  /* above header etc. */
+      content: ""; position: fixed; inset: 0;
+      background: var(--danger); opacity: 0; pointer-events: none; z-index: 9999;
     }
+    body.wrong::before { animation: pulseWrongPage .8s ease; }
+    @media (prefers-reduced-motion: reduce) { body.wrong::before { animation: none; } }
 
-    /* Trigger the heartbeat pulse */
-    body.wrong::before {
-      animation: pulseWrongPage 0.8s ease;
+    /* ── Certificate modal ────────────────────────────────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.4); z-index: 10000;
+      align-items: center; justify-content: center; padding: 20px;
     }
-
-    /* Optional: respect reduced-motion */
-    @media (prefers-reduced-motion: reduce) {
-      body.wrong::before { animation: none; }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--surface-1); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 28px 32px;
+      max-width: 460px; width: 100%; text-align: center;
+      box-shadow: var(--shadow-flyout);
+      animation: modalIn 200ms var(--easing);
     }
+    @keyframes modalIn {
+      from { transform: translateY(8px) scale(.98); opacity: 0; }
+      to   { transform: none; opacity: 1; }
+    }
+    .modal-icon  { font-size: 48px; line-height: 1; margin-bottom: 8px; }
+    .modal-title { font-size: 20px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+    .modal-body  { font-size: 14px; color: var(--ink-muted); }
+    .cert-input {
+      width: 100%; border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md); padding: 7px 12px;
+      font-size: 14px; color: var(--ink); background: var(--surface-1);
+      margin-top: 16px; text-align: center; font-family: inherit;
+      transition: border-color 100ms;
+    }
+    .cert-input:focus { outline: none; border: 2px solid var(--primary); }
+    .cert-input::placeholder { color: var(--ink-subdued); }
+    .modal-actions { display: flex; gap: 8px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
 
-
-
-
-    footer{padding:34px 0 60px; opacity:.95}
-    a{color:inherit}
-    .link{color:var(--accent-2); text-decoration:none}
-    .muted{color:var(--muted)}
-    .divider{height:1px; background: color-mix(in oklab, var(--ink), transparent 88%); margin: 26px 0}
-
-    /* Certificate modal */
-    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:10000;align-items:center;justify-content:center;padding:20px}
-    .modal-overlay.open{display:flex}
-    .modal-box{background:var(--card);border:1px solid color-mix(in oklab,var(--ink),transparent 80%);border-radius:var(--radius);padding:36px 32px;max-width:500px;width:100%;text-align:center;box-shadow:var(--shadow);animation:modalIn .28s ease}
-    @keyframes modalIn{from{transform:scale(.88);opacity:0}to{transform:scale(1);opacity:1}}
-    .cert-input{width:100%;box-sizing:border-box;background:color-mix(in oklab,var(--bg),transparent 30%);border:1px solid color-mix(in oklab,var(--ink),transparent 72%);border-radius:10px;padding:14px 16px;color:var(--ink);font-size:18px;margin-top:18px;text-align:center;font-family:inherit}
-    .cert-input:focus{outline:2px solid var(--accent);outline-offset:2px}
-    .cert-input::placeholder{color:var(--muted)}
-    .modal-actions{display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap}
-    .streak-bar{font-size:12px;color:var(--accent-2);margin-top:6px;min-height:16px;letter-spacing:.3px}
+    /* ── Footer ───────────────────────────────────────────────────────── */
+    footer { border-top: 1px solid var(--border); padding: 24px 0 48px; margin-top: 8px; }
+    .footer-text { font-size: 12px; color: var(--ink-muted); }
   </style>
 </head>
 <body>
@@ -179,23 +277,27 @@
   <main class="container">
     <section class="hero">
       <div>
-        <span class="tag">🚨 Public Service Announcement • For the love of endpoints</span>
-        <h1>It's <span class="bubbleheader">Intune</span>, <br>not <span class="bubbleheader" style="background:linear-gradient(120deg,#d62f2f,#860606);">Intunes</span>.</h1>
-        <p class="muted" style="font-size:20px; line-height:1.4; color:var(--ink)"><strong>Confused?</strong><br> You're not alone. People keep saying "Microsoft Intunes" because of Apple's iTunes. But they couldn't be more different. One keeps your corporate data safe, the other made you burn mix CDs in 2006.</p>
+        <div class="psa-bar">🚨 Public Service Announcement &nbsp;·&nbsp; for the love of endpoints</div>
+        <h1>It's <span class="mark-good">Intune</span>,<br>not <span class="mark-bad">Intunes</span>.</h1>
+        <p class="hero-body"><strong>Confused?</strong><br>You're not alone. People keep saying "Microsoft Intunes" because of Apple's iTunes. But they couldn't be more different. One keeps your corporate data safe, the other made you burn mix CDs in 2006.</p>
         <div class="cta">
-          <button class="btn" id="pledgeBtn">I solemnly swear to say "Microsoft Intune"</button>
-          <button class="btn secondary" id="copyBtn">Copy the correct name</button>
+          <button class="btn btn-primary" id="pledgeBtn">I solemnly swear to say "Microsoft Intune"</button>
+          <button class="btn btn-secondary" id="copyBtn">Copy the correct name</button>
         </div>
-        <p class="mini" id="pledgeMsg" role="status" aria-live="polite"></p>
+        <p id="pledgeMsg" role="status" aria-live="polite"></p>
+      </div>
+      <div class="hero-img">
+        <img src="images/Bart-ItsIntune-notIntunes.png" alt="Bart says: It's Intune, not Intunes!">
       </div>
     </section>
 
     <section class="panel" aria-label="Education and shenanigans">
+
       <article class="card wide">
-        <h3 style="margin:0 0 10px">Quick guide for the confused</h3>
-        <ul style="margin:0; padding-left:18px">
-          <li><strong>Microsoft Intune</strong>: Cloud service to <em>manage</em> and <em>secure</em> devices, apps, and data. Think policies, compliance, enrollment, remediation, happy security people.</li>
-          <li><strong>Apple iTunes</strong>: A classic media app to <em>play</em>, <em>purchase</em>, and <em>sync</em> music/videos. Great for nostalgia, not so great for deploying a configuration profile.</li>
+        <h2 class="card-title">Quick guide for the confused</h2>
+        <ul style="padding-left:18px; color:var(--ink-muted); line-height:1.8;">
+          <li><strong style="color:var(--ink)">Microsoft Intune</strong> — Cloud service to <em>manage</em> and <em>secure</em> devices, apps, and data. Think policies, compliance, enrollment, remediation, happy security people.</li>
+          <li><strong style="color:var(--ink)">Apple iTunes</strong> — A classic media app to <em>play</em>, <em>purchase</em>, and <em>sync</em> music and videos. Great for nostalgia, not so great for deploying a configuration profile.</li>
         </ul>
         <div class="divider"></div>
         <div class="marquee" aria-hidden="true">
@@ -207,64 +309,77 @@
       </article>
 
       <article class="card quiz">
-        <h3>Quiz: Is it Intune?</h3>
-        <p class="muted">Click the correct button depending on whether the word is actually Intune.</p>
-        <div class="q" id="quizRow">
-          <strong id="quizWord" style="font-size:20px">Intune</strong>
-          <div style="display:flex; gap:8px">
-            <button class="btn correct" data-ans="correct">Right</button>
-            <button class="btn wrong" data-ans="wrong">Wrong</button>
+        <h2 class="card-title">Quiz: Is it Intune?</h2>
+        <p style="font-size:13px; color:var(--ink-muted)">Click the correct button depending on whether the word shown is actually Intune.</p>
+        <div class="quiz-row" id="quizRow">
+          <strong id="quizWord">Intune</strong>
+          <div class="quiz-actions">
+            <button class="btn btn-success" data-ans="correct">Right</button>
+            <button class="btn btn-danger" data-ans="wrong">Wrong</button>
           </div>
-      </div>
-        <p id="quizFeedback" class="mini" style="margin-top:8px"></p>
+        </div>
+        <p id="quizFeedback"></p>
         <p id="quizStreak" class="streak-bar"></p>
       </article>
 
       <article class="card">
-        <h3 style="margin:0 0 10px">Hall of Misspellings (100% real, 1% shame)</h3>
-        <p class="muted">We've seen them all: Intunes, Intunes MDM, Microsoft Intunes, Apple Intune, iToons, InTune (camel case crimes). Consider this a safe space-and a gentle nudge.</p>
+        <h2 class="card-title">Hall of Misspellings <span style="font-size:12px; font-weight:400; color:var(--ink-muted)">(100% real, 1% shame)</span></h2>
+        <p style="font-size:13px; color:var(--ink-muted); margin-bottom:4px">We've seen them all: Intunes, Intunes MDM, Microsoft Intunes, Apple Intune, iToons, InTune (camel case crimes). Click any to correct it.</p>
         <div class="divider"></div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap" id="chips"></div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap" id="chips"></div>
       </article>
+
     </section>
 
-    <footer class="container">
-      <div class="divider"></div>
-      <p class="mini">Built for fun by <a class="link" href="https://scloud.work" target="_blank" rel="noopener">scloud.work</a>. Parody only. Need Intune help? Call Microsoft. Need iTunes? You’ll need a time machine: macOS pre-2019, Windows pre-2024.</p>
+    <footer>
+      <p class="footer-text">Built for fun by <a href="https://scloud.work" target="_blank" rel="noopener">scloud.work</a>. Parody only. Need Intune help? Call Microsoft. Need iTunes? You'll need a time machine: macOS pre-2019, Windows pre-2024.</p>
     </footer>
   </main>
 
+  <div id="certModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="certTitle">
+    <div class="modal-box">
+      <div class="modal-icon">🎓</div>
+      <h2 class="modal-title" id="certTitle">Intune Certified!</h2>
+      <p class="modal-body">10 correct answers in a row — including at least one correct spelling spotted. You've earned this very official certificate. Opens in a new tab — print or save as PDF.</p>
+      <input class="cert-input" type="text" id="certName" placeholder="Enter your name" maxlength="60" autocomplete="off" />
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="downloadCertBtn">Open Certificate →</button>
+        <button class="btn btn-secondary" id="closeCertBtn">Maybe later</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Typo marquee data 
+    // Typo marquee data
     const typos = [
       'Microsoft Intunes', 'Intunes MDM', 'Apple Intune', 'iToons', 'InTune', 'Micro$oft Intunes', 'IntuneS', 'iTune', 'Itune', 'Intone', 'iNTUNE', 'Intunez', 'in-Tune', 'In-Tunes', 'Microsoft Itunes', 'MS Intunes', 'Intunes365', 'Intuness', 'Intoune', 'InToon', 'Intoonz', 'iToonz', 'Intoun', 'Entunes', 'InTunez', 'Intuns', 'Inton'
     ];
 
     // shuffle it
-  function shuffle(array) {
-    let m = array.length, t, i;
-    while (m) {
-      i = Math.floor(Math.random() * m--);
-      t = array[m];
-      array[m] = array[i];
-      array[i] = t;
+    function shuffle(array) {
+      let m = array.length, t, i;
+      while (m) {
+        i = Math.floor(Math.random() * m--);
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+      }
+      return array;
     }
-    return array;
-  }
 
-  function buildTrack(el){
-    const frag = document.createDocumentFragment();
-    shuffle([...typos]).forEach(word => {
-      const chip = document.createElement('span');
-      chip.className = 'bubble';
-      chip.textContent = word;
-      frag.appendChild(chip);
-    });
-    el.appendChild(frag);
-  }
+    function buildTrack(el) {
+      const frag = document.createDocumentFragment();
+      shuffle([...typos]).forEach(word => {
+        const chip = document.createElement('span');
+        chip.className = 'bubble';
+        chip.textContent = word;
+        frag.appendChild(chip);
+      });
+      el.appendChild(frag);
+    }
 
-  buildTrack(document.getElementById('typoTrack1'));
-  buildTrack(document.getElementById('typoTrack2'));
+    buildTrack(document.getElementById('typoTrack1'));
+    buildTrack(document.getElementById('typoTrack2'));
 
     // Fact badges
     const facts = [
@@ -274,44 +389,45 @@
       {icon:'🎧', title:'VIBES', text:'iTunes gave us playlists, not compliance.'},
       {icon:'🖥️', title:'ENDPOINTS', text:'With Intune you deploy apps & policies.'}
     ];
-    const grid=document.getElementById('factGrid');
-    facts.forEach(f=>{
-      const row=document.createElement('div');
-      row.className='badge';
-      row.innerHTML=`<span style="font-size:20px">${f.icon}</span><div><strong>${f.title}</strong><div class="mini">${f.text}</div></div>`;
+    const grid = document.getElementById('factGrid');
+    facts.forEach(f => {
+      const row = document.createElement('div');
+      row.className = 'badge';
+      row.innerHTML = `<span style="font-size:20px">${f.icon}</span><div><strong>${f.title}</strong><div class="mini">${f.text}</div></div>`;
       grid.appendChild(row);
     });
 
     // Chips section (misspellings you can tap to correct)
-    const chipBox=document.getElementById('chips');
-    typos.forEach(word=>{
-      const btn=document.createElement('button');
-      btn.className='ghost-btn';
-      btn.textContent=word;
-      btn.style.borderStyle='dashed';
-      btn.addEventListener('click',()=>{
-        btn.textContent='Microsoft Intune ✅';
-        btn.style.borderColor='var(--good)';
+    const chipBox = document.getElementById('chips');
+    typos.forEach(word => {
+      const btn = document.createElement('button');
+      btn.className = 'ghost-btn';
+      btn.textContent = word;
+      btn.style.borderStyle = 'dashed';
+      btn.addEventListener('click', () => {
+        btn.textContent = 'Microsoft Intune ✅';
+        btn.style.borderColor = 'var(--good)';
       });
       chipBox.appendChild(btn);
     });
 
     // Pledge + copy
-    document.getElementById('pledgeBtn')?.addEventListener('click',()=>{
-      const msg=document.getElementById('pledgeMsg');
-      msg.textContent='👏 Thanks! Your devices feel safer already.';
-      setTimeout(()=>msg.textContent='', 3500);
+    document.getElementById('pledgeBtn')?.addEventListener('click', () => {
+      const msg = document.getElementById('pledgeMsg');
+      msg.textContent = '👏 Thanks! Your devices feel safer already.';
+      setTimeout(() => msg.textContent = '', 3500);
     });
-    document.getElementById('copyBtn')?.addEventListener('click',async()=>{
-      try{ await navigator.clipboard.writeText('Microsoft Intune');
-        const msg=document.getElementById('pledgeMsg');
-        msg.textContent='📋 Copied: "Microsoft Intune". Paste generously.';
-        setTimeout(()=>msg.textContent='', 3500);
-      }catch(e){ alert('Copy failed. Please copy manually: Microsoft Intune'); }
+    document.getElementById('copyBtn')?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText('Microsoft Intune');
+        const msg = document.getElementById('pledgeMsg');
+        msg.textContent = '📋 Copied: "Microsoft Intune". Paste generously.';
+        setTimeout(() => msg.textContent = '', 3500);
+      } catch(e) { alert('Copy failed. Please copy manually: Microsoft Intune'); }
     });
 
     // Confetti helper
-    function launchConfetti(){
+    function launchConfetti() {
       if (typeof confetti !== 'function') return;
       const duration = 1500;
       const animationEnd = Date.now() + duration;
@@ -333,12 +449,12 @@
     function updateStreakBar(n) { streakEl.textContent = n > 0 ? `Streak: ${n} / 10` : ''; }
 
     // Mini quiz
-    const words=['Intune','Microsoft Intune','Intune','Microsoft Intune','Microsoft Intunes', 'Intunes MDM', 'Apple Intune', 'iToons', 'InTune', 'Micro$oft Intunes', 'IntuneS', 'iTune', 'Itune', 'Intone', 'iNTUNE', 'Intunez', 'in-Tune', 'In-Tunes', 'Microsoft Itunes', 'MS Intunes', 'Intunes365', 'Intuness', 'Intoune', 'InToon', 'Intoonz', 'iToonz', 'Intoun', 'Entunes', 'InTunez', 'Intuns', 'Inton'];
-    const quizWordEl=document.getElementById('quizWord');
-    const feedback=document.getElementById('quizFeedback');
-    function next(){ quizWordEl.textContent=words[Math.floor(Math.random()*words.length)]; feedback.textContent=''; }
+    const words = ['Intune','Microsoft Intune','Intune','Microsoft Intune','Microsoft Intunes', 'Intunes MDM', 'Apple Intune', 'iToons', 'InTune', 'Micro$oft Intunes', 'IntuneS', 'iTune', 'Itune', 'Intone', 'iNTUNE', 'Intunez', 'in-Tune', 'In-Tunes', 'Microsoft Itunes', 'MS Intunes', 'Intunes365', 'Intuness', 'Intoune', 'InToon', 'Intoonz', 'iToonz', 'Intoun', 'Entunes', 'InTunez', 'Intuns', 'Inton'];
+    const quizWordEl = document.getElementById('quizWord');
+    const feedback = document.getElementById('quizFeedback');
+    function next() { quizWordEl.textContent = words[Math.floor(Math.random() * words.length)]; feedback.textContent = ''; }
 
-    function check(ans){
+    function check(ans) {
       const w = quizWordEl.textContent; // case-sensitive
       const isCorrectWord = (w === 'Intune' || w === 'Microsoft Intune');
       const isUserSayingCorrect = (ans === 'correct');
@@ -347,38 +463,29 @@
       feedback.textContent = correct ? '✅ Correct!' : '❌ Nope! Only Intune or Microsoft Intune are valid.';
       feedback.style.color = correct ? 'var(--good)' : 'var(--bad)';
 
-      // Confetti on true positives
-      if (isUserSayingCorrect && isCorrectWord) {
-        launchConfetti();
-      }
+      if (isUserSayingCorrect && isCorrectWord) launchConfetti();
 
-      // Red pulse on wrong answers
       if (!correct) {
         document.body.classList.add('wrong');
         setTimeout(() => document.body.classList.remove('wrong'), 800);
       }
 
-      // Streak tracking
       if (correct) {
         streak++;
         if (isUserSayingCorrect && isCorrectWord) streakHasCorrectWord = true;
         updateStreakBar(streak);
         if (streak >= 10 && streakHasCorrectWord) {
-          streak = 0;
-          streakHasCorrectWord = false;
-          updateStreakBar(0);
+          streak = 0; streakHasCorrectWord = false; updateStreakBar(0);
           setTimeout(openCertModal, 700);
         }
       } else {
-        streak = 0;
-        streakHasCorrectWord = false;
-        updateStreakBar(0);
+        streak = 0; streakHasCorrectWord = false; updateStreakBar(0);
       }
 
       setTimeout(next, 900);
     }
 
-    document.querySelectorAll('.quiz [data-ans]')?.forEach(b=> b.addEventListener('click', ()=>check(b.dataset.ans)) );
+    document.querySelectorAll('.quiz [data-ans]')?.forEach(b => b.addEventListener('click', () => check(b.dataset.ans)));
     next();
 
     // Certificate modal
@@ -409,7 +516,7 @@
     function buildCertHtml(name) {
       const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
       const safeName = escapeHtml(name);
-      const html = `<!doctype html>
+      return `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -433,76 +540,51 @@
       max-width: 860px;
       padding: 64px 72px;
       text-align: center;
-      border: 5px solid #7c5cff;
+      border: 5px solid #0078D4;
       outline: 2px solid #23d2ff;
       outline-offset: -14px;
-      box-shadow: 0 30px 80px rgba(80,60,180,.2);
+      box-shadow: 0 30px 80px rgba(0,120,212,.15);
     }
     .logo { font-size: 52px; margin-bottom: 16px; line-height: 1; }
     h1 {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: #1a0f40;
-      margin-bottom: 4px;
+      font-size: 28px; font-weight: 700;
+      letter-spacing: 4px; text-transform: uppercase;
+      color: #1a0f40; margin-bottom: 4px;
     }
     .issued-by {
-      font-size: 12px;
-      letter-spacing: 6px;
-      text-transform: uppercase;
-      color: #7c5cff;
-      margin-bottom: 28px;
+      font-size: 12px; letter-spacing: 6px; text-transform: uppercase;
+      color: #0078D4; margin-bottom: 28px;
     }
     .divider {
-      border: none;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #7c5cff 25%, #23d2ff 75%, transparent);
-      margin: 0 auto 28px;
-      width: 70%;
+      border: none; height: 2px;
+      background: linear-gradient(90deg, transparent, #0078D4 25%, #23d2ff 75%, transparent);
+      margin: 0 auto 28px; width: 70%;
     }
-    .certifies {
-      font-style: italic;
-      font-size: 20px;
-      color: #666;
-      margin-bottom: 10px;
-    }
+    .certifies { font-style: italic; font-size: 20px; color: #666; margin-bottom: 10px; }
     .recipient-name {
-      font-size: clamp(34px, 6vw, 56px);
-      font-weight: 700;
-      line-height: 1.2;
+      font-size: clamp(34px, 6vw, 56px); font-weight: 700; line-height: 1.2;
       margin: 0 0 24px;
-      background: linear-gradient(100deg, #7c5cff, #23d2ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      background: linear-gradient(100deg, #0078D4, #23d2ff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       word-break: break-word;
     }
     .body { font-size: 19px; color: #3a3060; line-height: 1.8; }
     .body strong { color: #1a0f40; }
     .footer-divider {
-      border: none;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #7c5cff 25%, #23d2ff 75%, transparent);
-      margin: 28px auto 24px;
-      width: 50%;
+      border: none; height: 1px;
+      background: linear-gradient(90deg, transparent, #0078D4 25%, #23d2ff 75%, transparent);
+      margin: 28px auto 24px; width: 50%;
     }
     .cert-date { font-size: 15px; color: #999; font-style: italic; margin-bottom: 8px; }
-    .cert-brand { font-size: 20px; font-weight: 700; letter-spacing: 2px; color: #23d2ff; margin-bottom: 6px; }
+    .cert-brand { font-size: 20px; font-weight: 700; letter-spacing: 2px; color: #0078D4; margin-bottom: 6px; }
     .cert-disclaimer { font-size: 11px; color: #bbb; letter-spacing: .5px; }
     .actions { margin-top: 32px; display: flex; gap: 12px; justify-content: center; }
     .btn-print {
-      padding: 12px 28px;
-      background: linear-gradient(100deg, #7c5cff, #23d2ff);
-      border: none;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: Georgia, serif;
+      padding: 10px 28px; background: #0078D4; border: none;
+      border-radius: 4px; color: #fff; font-size: 14px; font-weight: 600;
+      cursor: pointer; font-family: 'Segoe UI', sans-serif; letter-spacing: .3px;
     }
-    .btn-print:active { opacity: .85; }
+    .btn-print:hover { background: #106EBE; }
     @media print {
       body { background: white; padding: 0; }
       .actions { display: none; }
@@ -535,23 +617,8 @@
   </div>
 </body>
 </html>`;
-
-      return html;
     }
 
   </script>
-
-  <div id="certModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="certTitle">
-    <div class="modal-box">
-      <div style="font-size:54px;line-height:1;margin-bottom:8px">🎓</div>
-      <h2 id="certTitle" style="margin:8px 0 6px">Intune Certified!</h2>
-      <p class="muted" style="margin:0;font-size:15px">10 correct answers in a row — including at least one correct spelling spotted. You've earned this very official certificate.</p>
-      <input class="cert-input" type="text" id="certName" placeholder="Enter your name" maxlength="60" autocomplete="off" />
-      <div class="modal-actions">
-        <button class="btn" id="downloadCertBtn">Open Certificate →</button>
-        <button class="btn secondary" id="closeCertBtn">Maybe later</button>
-      </div>
-    </div>
-  </div>
 </body>
 </html>
