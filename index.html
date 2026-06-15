@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>intunes.IT - It's Intune, not Intunes.</title>
+  <meta name="description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes. Welcome to intunes.IT, the home of gentle correction and cheeky clarity." />
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/x-icon" href="images/intune-warning.ico">
+  <meta property="og:image" content="https://intunes.it/images/Bart-ItsIntune-notIntunes.png" />
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root{
+      --bg: #0f1226;
+      --card:#15183a;
+      --ink:#e9ecff;
+      --muted:#b6b9d8;
+      --accent:#7c5cff;
+      --accent-2:#23d2ff;
+      --good:#00d192;
+      --bad:#ff6b6b;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+
+    html,body{height:100%}
+    body{
+      margin:0;
+      font:16px/1.5 ui-sans-serif, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(124,92,255,.25), transparent 60%),
+        radial-gradient(1200px 600px at 110% -20%, rgba(35,210,255,.25), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg));
+      overflow-x: hidden;
+    }
+    .container{max-width:1100px;margin:0 auto;padding:24px}
+    header{
+      position:sticky; top:0; z-index:50; backdrop-filter:saturate(150%) blur(8px);
+      background: color-mix(in oklab, var(--bg), transparent 50%);
+      border-bottom:1px solid color-mix(in oklab, var(--ink), transparent 88%);
+    }
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0}
+    .logo{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.4px}
+    .logo img{width:40px;height:40px; border-radius:8px; box-shadow:var(--shadow)}
+
+    .hero{display:grid; grid-template-columns: 1.2fr .8fr; gap:28px; align-items:center; padding:72px 0 48px}
+    @media (max-width: 900px){ .hero{grid-template-columns: 1fr; padding:48px 0 20px} }
+
+    h1{font-size: clamp(48px, 6vw, 72px); line-height:1.05; margin:16px 0; letter-spacing:-.8px}
+    .tag{display:inline-flex; align-items:center; gap:8px; font-size:16px; font-weight:700; color:var(--accent-2);
+      background: color-mix(in oklab, var(--accent-2), transparent 85%);
+      padding:10px 16px; border-radius:999px; box-shadow: var(--shadow)}
+
+    .hero p{font-size:18px; max-width:550px; margin-top:12px; color:var(--muted)}
+
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:24px}
+    .btn{
+      appearance:none; border:0; border-radius:14px; padding:14px 18px; font-weight:700;
+      color:#0b0b16; background: linear-gradient(100deg, var(--accent), var(--accent-2));
+      box-shadow: var(--shadow); cursor:pointer; font-size:15px;
+    }
+    .btn.secondary{background:transparent;color:var(--ink);border:1px solid color-mix(in oklab, var(--ink), transparent 80%)}
+    .btn:active{transform:translateY(1px)}
+
+    .btn.correct {
+      background: linear-gradient(135deg, color-mix(in oklab, var(--good), transparent 15%), color-mix(in oklab, var(--good), transparent 35%));
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0, 209, 146, 0.3);
+    }
+
+    .btn.wrong {
+      background: linear-gradient(135deg, color-mix(in oklab, var(--bad), transparent 15%), color-mix(in oklab, var(--bad), transparent 35%));
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+    }
+
+    .btn.correct:active,
+    .btn.wrong:active {
+      transform: translateY(1px);
+      opacity: 0.85;
+    }
+
+
+
+    .card{background:var(--card); border:1px solid color-mix(in oklab, var(--ink), transparent 86%);
+      border-radius: var(--radius); padding:18px; box-shadow: var(--shadow)}
+
+    .panel{display:grid; grid-template-columns: repeat(12, 1fr); gap:18px}
+    .panel > *{grid-column: span 6}
+    .panel .wide{grid-column: span 12}
+    @media (max-width: 900px){ .panel > *{grid-column: span 12} }
+
+    .bubbleheader{
+      background: linear-gradient(120deg, color-mix(in oklab, #02f52a, transparent 50%), color-mix(in oklab, var(--accent-2), transparent 50%));
+      border-radius: 999px; padding:14px 20px; color: #0c160c; font-weight:800; font-size:46px; white-space:nowrap; display:inline-block; width:auto;
+    }
+    
+    .bubble{
+      background: linear-gradient(120deg, color-mix(in oklab, var(--accent), transparent 50%), color-mix(in oklab, var(--accent-2), transparent 50%));
+      border-radius: 999px; padding:14px 20px; color: #0c0c16; font-weight:800; font-size:22px; white-space:nowrap; display:inline-block; width:auto;
+    }
+    .marquee{ display:flex; overflow:hidden; }
+    .marquee-track{ display:flex; gap:18px; animation: scroll 20s linear infinite; }
+    @keyframes scroll { from{ transform: translateX(0) } to{ transform: translateX(-100%) } }
+
+    .mini{font-size:12px; color:var(--muted)}
+
+    .grid-badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px}
+    .badge{border:1px solid color-mix(in oklab, var(--ink), transparent 82%); border-radius:12px; padding:10px 12px; display:flex; align-items:center; gap:10px}
+
+    .quiz h3{margin:0 0 10px}
+    .quiz .q{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px; border-radius:12px; border:1px solid color-mix(in oklab, var(--ink), transparent 86%)}
+    .pill{padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; letter-spacing:.3px}
+
+    /* pulseWrongPage  */
+    @keyframes pulseWrongPage {
+      0%   { opacity: 0; }
+      25%  { opacity: 0.35; } /* strong thump */
+      50%  { opacity: 0; }
+      75%  { opacity: 0.22; } /* lighter thump */
+      100% { opacity: 0; }
+    }
+
+    /* Full-page red overlay that sits above everything but ignores clicks */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: var(--bad);         /* uses your palette (#ff6b6b) */
+      opacity: 0;
+      pointer-events: none;
+      z-index: 9999;                  /* above header etc. */
+    }
+
+    /* Trigger the heartbeat pulse */
+    body.wrong::before {
+      animation: pulseWrongPage 0.8s ease;
+    }
+
+    /* Optional: respect reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      body.wrong::before { animation: none; }
+    }
+
+
+
+
+    footer{padding:34px 0 60px; opacity:.95}
+    a{color:inherit}
+    .link{color:var(--accent-2); text-decoration:none}
+    .muted{color:var(--muted)}
+    .divider{height:1px; background: color-mix(in oklab, var(--ink), transparent 88%); margin: 26px 0}
+
+    /* Certificate modal */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:10000;align-items:center;justify-content:center;padding:20px}
+    .modal-overlay.open{display:flex}
+    .modal-box{background:var(--card);border:1px solid color-mix(in oklab,var(--ink),transparent 80%);border-radius:var(--radius);padding:36px 32px;max-width:500px;width:100%;text-align:center;box-shadow:var(--shadow);animation:modalIn .28s ease}
+    @keyframes modalIn{from{transform:scale(.88);opacity:0}to{transform:scale(1);opacity:1}}
+    .cert-input{width:100%;box-sizing:border-box;background:color-mix(in oklab,var(--bg),transparent 30%);border:1px solid color-mix(in oklab,var(--ink),transparent 72%);border-radius:10px;padding:14px 16px;color:var(--ink);font-size:18px;margin-top:18px;text-align:center;font-family:inherit}
+    .cert-input:focus{outline:2px solid var(--accent);outline-offset:2px}
+    .cert-input::placeholder{color:var(--muted)}
+    .modal-actions{display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+    .streak-bar{font-size:12px;color:var(--accent-2);margin-top:6px;min-height:16px;letter-spacing:.3px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        <img src="images/intune-warning.avif" alt="Intune Warning Logo">
+        <span>intunes.IT</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <span class="tag">🚨 Public Service Announcement • For the love of endpoints</span>
+        <h1>It's <span class="bubbleheader">Intune</span>, <br>not <span class="bubbleheader" style="background:linear-gradient(120deg,#d62f2f,#860606);">Intunes</span>.</h1>
+        <p class="muted" style="font-size:20px; line-height:1.4; color:var(--ink)"><strong>Confused?</strong><br> You're not alone. People keep saying "Microsoft Intunes" because of Apple's iTunes. But they couldn't be more different. One keeps your corporate data safe, the other made you burn mix CDs in 2006.</p>
+        <div class="cta">
+          <button class="btn" id="pledgeBtn">I solemnly swear to say "Microsoft Intune"</button>
+          <button class="btn secondary" id="copyBtn">Copy the correct name</button>
+        </div>
+        <p class="mini" id="pledgeMsg" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="Education and shenanigans">
+      <article class="card wide">
+        <h3 style="margin:0 0 10px">Quick guide for the confused</h3>
+        <ul style="margin:0; padding-left:18px">
+          <li><strong>Microsoft Intune</strong>: Cloud service to <em>manage</em> and <em>secure</em> devices, apps, and data. Think policies, compliance, enrollment, remediation, happy security people.</li>
+          <li><strong>Apple iTunes</strong>: A classic media app to <em>play</em>, <em>purchase</em>, and <em>sync</em> music/videos. Great for nostalgia, not so great for deploying a configuration profile.</li>
+        </ul>
+        <div class="divider"></div>
+        <div class="marquee" aria-hidden="true">
+          <div class="marquee-track" id="typoTrack1"></div>
+          <div class="marquee-track" id="typoTrack2"></div>
+        </div>
+        <div class="divider"></div>
+        <div class="grid-badges" id="factGrid"></div>
+      </article>
+
+      <article class="card quiz">
+        <h3>Quiz: Is it Intune?</h3>
+        <p class="muted">Click the correct button depending on whether the word is actually Intune.</p>
+        <div class="q" id="quizRow">
+          <strong id="quizWord" style="font-size:20px">Intune</strong>
+          <div style="display:flex; gap:8px">
+            <button class="btn correct" data-ans="correct">Right</button>
+            <button class="btn wrong" data-ans="wrong">Wrong</button>
+          </div>
+      </div>
+        <p id="quizFeedback" class="mini" style="margin-top:8px"></p>
+        <p id="quizStreak" class="streak-bar"></p>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:0 0 10px">Hall of Misspellings (100% real, 1% shame)</h3>
+        <p class="muted">We've seen them all: Intunes, Intunes MDM, Microsoft Intunes, Apple Intune, iToons, InTune (camel case crimes). Consider this a safe space-and a gentle nudge.</p>
+        <div class="divider"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap" id="chips"></div>
+      </article>
+    </section>
+
+    <footer class="container">
+      <div class="divider"></div>
+      <p class="mini">Built for fun by <a class="link" href="https://scloud.work" target="_blank" rel="noopener">scloud.work</a>. Parody only. Need Intune help? Call Microsoft. Need iTunes? You’ll need a time machine: macOS pre-2019, Windows pre-2024.</p>
+    </footer>
+  </main>
+
+  <script>
+    // Typo marquee data 
+    const typos = [
+      'Microsoft Intunes', 'Intunes MDM', 'Apple Intune', 'iToons', 'InTune', 'Micro$oft Intunes', 'IntuneS', 'iTune', 'Itune', 'Intone', 'iNTUNE', 'Intunez', 'in-Tune', 'In-Tunes', 'Microsoft Itunes', 'MS Intunes', 'Intunes365', 'Intuness', 'Intoune', 'InToon', 'Intoonz', 'iToonz', 'Intoun', 'Entunes', 'InTunez', 'Intuns', 'Inton'
+    ];
+
+    // shuffle it
+  function shuffle(array) {
+    let m = array.length, t, i;
+    while (m) {
+      i = Math.floor(Math.random() * m--);
+      t = array[m];
+      array[m] = array[i];
+      array[i] = t;
+    }
+    return array;
+  }
+
+  function buildTrack(el){
+    const frag = document.createDocumentFragment();
+    shuffle([...typos]).forEach(word => {
+      const chip = document.createElement('span');
+      chip.className = 'bubble';
+      chip.textContent = word;
+      frag.appendChild(chip);
+    });
+    el.appendChild(frag);
+  }
+
+  buildTrack(document.getElementById('typoTrack1'));
+  buildTrack(document.getElementById('typoTrack2'));
+
+    // Fact badges
+    const facts = [
+      {icon:'🛡️', title:'SECURITY', text:'Intune manages and secures devices & apps.'},
+      {icon:'🎵', title:'MUSIC', text:'iTunes plays and syncs media. Different job!'},
+      {icon:'☁️', title:'CLOUD', text:'Intune lives in Microsoft 365 / Entra world.'},
+      {icon:'🎧', title:'VIBES', text:'iTunes gave us playlists, not compliance.'},
+      {icon:'🖥️', title:'ENDPOINTS', text:'With Intune you deploy apps & policies.'}
+    ];
+    const grid=document.getElementById('factGrid');
+    facts.forEach(f=>{
+      const row=document.createElement('div');
+      row.className='badge';
+      row.innerHTML=`<span style="font-size:20px">${f.icon}</span><div><strong>${f.title}</strong><div class="mini">${f.text}</div></div>`;
+      grid.appendChild(row);
+    });
+
+    // Chips section (misspellings you can tap to correct)
+    const chipBox=document.getElementById('chips');
+    typos.forEach(word=>{
+      const btn=document.createElement('button');
+      btn.className='ghost-btn';
+      btn.textContent=word;
+      btn.style.borderStyle='dashed';
+      btn.addEventListener('click',()=>{
+        btn.textContent='Microsoft Intune ✅';
+        btn.style.borderColor='var(--good)';
+      });
+      chipBox.appendChild(btn);
+    });
+
+    // Pledge + copy
+    document.getElementById('pledgeBtn')?.addEventListener('click',()=>{
+      const msg=document.getElementById('pledgeMsg');
+      msg.textContent='👏 Thanks! Your devices feel safer already.';
+      setTimeout(()=>msg.textContent='', 3500);
+    });
+    document.getElementById('copyBtn')?.addEventListener('click',async()=>{
+      try{ await navigator.clipboard.writeText('Microsoft Intune');
+        const msg=document.getElementById('pledgeMsg');
+        msg.textContent='📋 Copied: "Microsoft Intune". Paste generously.';
+        setTimeout(()=>msg.textContent='', 3500);
+      }catch(e){ alert('Copy failed. Please copy manually: Microsoft Intune'); }
+    });
+
+    // Confetti helper
+    function launchConfetti(){
+      if (typeof confetti !== 'function') return;
+      const duration = 1500;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 2000 };
+      function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+      (function frame() {
+        const timeLeft = animationEnd - Date.now();
+        if (timeLeft <= 0) return;
+        const particleCount = 50 * (timeLeft / duration);
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.9), y: Math.random() - 0.2 } }));
+        requestAnimationFrame(frame);
+      })();
+    }
+
+    // Streak tracking
+    let streak = 0;
+    let streakHasCorrectWord = false;
+    const streakEl = document.getElementById('quizStreak');
+    function updateStreakBar(n) { streakEl.textContent = n > 0 ? `Streak: ${n} / 10` : ''; }
+
+    // Mini quiz
+    const words=['Intune','Microsoft Intune','Intune','Microsoft Intune','Microsoft Intunes', 'Intunes MDM', 'Apple Intune', 'iToons', 'InTune', 'Micro$oft Intunes', 'IntuneS', 'iTune', 'Itune', 'Intone', 'iNTUNE', 'Intunez', 'in-Tune', 'In-Tunes', 'Microsoft Itunes', 'MS Intunes', 'Intunes365', 'Intuness', 'Intoune', 'InToon', 'Intoonz', 'iToonz', 'Intoun', 'Entunes', 'InTunez', 'Intuns', 'Inton'];
+    const quizWordEl=document.getElementById('quizWord');
+    const feedback=document.getElementById('quizFeedback');
+    function next(){ quizWordEl.textContent=words[Math.floor(Math.random()*words.length)]; feedback.textContent=''; }
+
+    function check(ans){
+      const w = quizWordEl.textContent; // case-sensitive
+      const isCorrectWord = (w === 'Intune' || w === 'Microsoft Intune');
+      const isUserSayingCorrect = (ans === 'correct');
+      const correct = (isUserSayingCorrect && isCorrectWord) || (!isUserSayingCorrect && !isCorrectWord);
+
+      feedback.textContent = correct ? '✅ Correct!' : '❌ Nope! Only Intune or Microsoft Intune are valid.';
+      feedback.style.color = correct ? 'var(--good)' : 'var(--bad)';
+
+      // Confetti on true positives
+      if (isUserSayingCorrect && isCorrectWord) {
+        launchConfetti();
+      }
+
+      // Red pulse on wrong answers
+      if (!correct) {
+        document.body.classList.add('wrong');
+        setTimeout(() => document.body.classList.remove('wrong'), 800);
+      }
+
+      // Streak tracking
+      if (correct) {
+        streak++;
+        if (isUserSayingCorrect && isCorrectWord) streakHasCorrectWord = true;
+        updateStreakBar(streak);
+        if (streak >= 10 && streakHasCorrectWord) {
+          streak = 0;
+          streakHasCorrectWord = false;
+          updateStreakBar(0);
+          setTimeout(openCertModal, 700);
+        }
+      } else {
+        streak = 0;
+        streakHasCorrectWord = false;
+        updateStreakBar(0);
+      }
+
+      setTimeout(next, 900);
+    }
+
+    document.querySelectorAll('.quiz [data-ans]')?.forEach(b=> b.addEventListener('click', ()=>check(b.dataset.ans)) );
+    next();
+
+    // Certificate modal
+    function openCertModal() {
+      document.getElementById('certModal').classList.add('open');
+      setTimeout(() => document.getElementById('certName').focus(), 80);
+    }
+    function closeCertModal() {
+      document.getElementById('certModal').classList.remove('open');
+    }
+
+    document.getElementById('closeCertBtn').addEventListener('click', closeCertModal);
+    document.getElementById('certModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeCertModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCertModal(); });
+    document.getElementById('certName').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('downloadCertBtn').click(); });
+    document.getElementById('downloadCertBtn').addEventListener('click', () => {
+      const name = document.getElementById('certName').value.trim() || 'An Anonymous Hero';
+      generateCertificate(name);
+    });
+
+    function certRoundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    function generateCertificate(name) {
+      const W = 1600, H = 1100;
+      const canvas = document.createElement('canvas');
+      canvas.width = W; canvas.height = H;
+      const ctx = canvas.getContext('2d');
+
+      // Background
+      const bg = ctx.createLinearGradient(0, 0, W, H);
+      bg.addColorStop(0, '#0d1020'); bg.addColorStop(1, '#141733');
+      ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+      // Purple glow top-left
+      const g1 = ctx.createRadialGradient(0, 0, 0, 0, 0, 900);
+      g1.addColorStop(0, 'rgba(124,92,255,.22)'); g1.addColorStop(1, 'transparent');
+      ctx.fillStyle = g1; ctx.fillRect(0, 0, W, H);
+
+      // Cyan glow top-right
+      const g2 = ctx.createRadialGradient(W, 0, 0, W, 0, 900);
+      g2.addColorStop(0, 'rgba(35,210,255,.17)'); g2.addColorStop(1, 'transparent');
+      ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
+
+      // Outer border (purple)
+      ctx.strokeStyle = '#7c5cff'; ctx.lineWidth = 5;
+      certRoundRect(ctx, 28, 28, W - 56, H - 56, 22); ctx.stroke();
+
+      // Inner border (cyan)
+      ctx.strokeStyle = '#23d2ff'; ctx.lineWidth = 1.5;
+      certRoundRect(ctx, 44, 44, W - 88, H - 88, 16); ctx.stroke();
+
+      // Header band
+      const hg = ctx.createLinearGradient(0, 0, W, 0);
+      hg.addColorStop(0, 'rgba(124,92,255,.13)');
+      hg.addColorStop(.5, 'rgba(35,210,255,.13)');
+      hg.addColorStop(1, 'rgba(124,92,255,.13)');
+      ctx.fillStyle = hg;
+      certRoundRect(ctx, 60, 60, W - 120, 185, 10); ctx.fill();
+
+      // Shield icon
+      ctx.font = '72px serif'; ctx.textAlign = 'center';
+      ctx.fillText('🛡️', W / 2, 158);
+
+      // Title
+      ctx.font = 'bold 68px Georgia, serif'; ctx.fillStyle = '#e9ecff';
+      ctx.fillText('Certificate of Intune Literacy', W / 2, 308);
+
+      // Gradient divider helper
+      function drawDivider(y, x0, x1) {
+        const dg = ctx.createLinearGradient(x0, 0, x1, 0);
+        dg.addColorStop(0, 'transparent'); dg.addColorStop(.15, '#7c5cff');
+        dg.addColorStop(.85, '#23d2ff'); dg.addColorStop(1, 'transparent');
+        ctx.strokeStyle = dg; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+      }
+      drawDivider(352, 200, W - 200);
+
+      // "This certifies that"
+      ctx.font = 'italic 34px Georgia, serif'; ctx.fillStyle = '#b6b9d8';
+      ctx.fillText('This certifies that', W / 2, 422);
+
+      // Name — auto-size and gradient
+      let namePx = Math.min(90, Math.max(40, Math.floor(1700 / Math.max(name.length, 3))));
+      ctx.font = `bold ${namePx}px Georgia, serif`;
+      while (ctx.measureText(name).width > W - 180 && namePx > 28) {
+        namePx -= 2;
+        ctx.font = `bold ${namePx}px Georgia, serif`;
+      }
+      const ng = ctx.createLinearGradient(W * .2, 0, W * .8, 0);
+      ng.addColorStop(0, '#7c5cff'); ng.addColorStop(1, '#23d2ff');
+      ctx.fillStyle = ng;
+      ctx.fillText(name, W / 2, 535);
+
+      // Body text
+      ctx.font = '30px ui-sans-serif, Helvetica Neue, Arial, sans-serif'; ctx.fillStyle = '#b6b9d8';
+      ctx.fillText('has demonstrated outstanding ability to distinguish', W / 2, 634);
+      ctx.font = 'bold 32px ui-sans-serif, Helvetica Neue, Arial, sans-serif'; ctx.fillStyle = '#e9ecff';
+      ctx.fillText('Microsoft Intune', W / 2, 680);
+      ctx.font = '30px ui-sans-serif, Helvetica Neue, Arial, sans-serif'; ctx.fillStyle = '#b6b9d8';
+      ctx.fillText('from Apple\'s iTunes — without saying "Intunes" even once.', W / 2, 726);
+
+      drawDivider(792, 300, W - 300);
+
+      // Date
+      const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      ctx.font = '26px ui-sans-serif, Arial, sans-serif'; ctx.fillStyle = '#b6b9d8';
+      ctx.fillText(date, W / 2, 862);
+
+      // Branding
+      ctx.font = 'bold 34px ui-sans-serif, Arial, sans-serif'; ctx.fillStyle = '#23d2ff';
+      ctx.fillText('intunes.IT', W / 2, 920);
+
+      ctx.font = '21px ui-sans-serif, Arial, sans-serif'; ctx.fillStyle = '#555870';
+      ctx.fillText("It's Intune, not Intunes. (Not a Microsoft product. Obviously.)", W / 2, 966);
+
+      // Trigger download
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.download = `intune-certificate.png`;
+        a.href = url; a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+      }, 'image/png');
+    }
+
+  </script>
+
+  <div id="certModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="certTitle">
+    <div class="modal-box">
+      <div style="font-size:54px;line-height:1;margin-bottom:8px">🎓</div>
+      <h2 id="certTitle" style="margin:8px 0 6px">Intune Certified!</h2>
+      <p class="muted" style="margin:0;font-size:15px">10 correct answers in a row — including at least one correct spelling spotted. You've earned this very official certificate.</p>
+      <input class="cert-input" type="text" id="certName" placeholder="Enter your name" maxlength="60" autocomplete="off" />
+      <div class="modal-actions">
+        <button class="btn" id="downloadCertBtn">⬇ Download Certificate</button>
+        <button class="btn secondary" id="closeCertBtn">Maybe later</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
