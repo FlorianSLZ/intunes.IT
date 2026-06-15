@@ -3,13 +3,62 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>intunes.IT — It's Intune, not Intunes.</title>
+  <title>intunes.IT | It's Intune, not Intunes.</title>
   <meta name="description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes. Welcome to intunes.IT, the home of gentle correction and cheeky clarity." />
   <meta name="color-scheme" content="light">
+  <link rel="canonical" href="https://intunes.it">
   <link rel="icon" type="image/x-icon" href="images/intune-warning.ico">
-  <meta property="og:image" content="https://intunes.it/images/Bart-ItsIntune-notIntunes.png" />
 
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://intunes.it" />
+  <meta property="og:site_name"   content="intunes.IT" />
+  <meta property="og:title"       content="It's Intune, not Intunes." />
+  <meta property="og:description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes — the home of gentle correction and cheeky clarity." />
+  <meta property="og:image"       content="https://intunes.it/images/Bart-ItsIntune-notIntunes.png" />
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="It's Intune, not Intunes." />
+  <meta name="twitter:description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes — the home of gentle correction and cheeky clarity." />
+  <meta name="twitter:image"       content="https://intunes.it/images/Bart-ItsIntune-notIntunes.png" />
+
+  <!-- Structured data: FAQ rich result -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Microsoft Intune?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Microsoft Intune is a cloud-based MDM/MAM service to manage and secure devices, apps, and data. It handles policies, compliance, enrollment, and remediation — it is an enterprise platform, not a media player."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between Intune and iTunes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Microsoft Intune is an enterprise device management cloud service. Apple iTunes is a media application for playing, purchasing, and syncing music and videos. They are completely unrelated products from different companies."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why do people say Intunes instead of Intune?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "People commonly confuse Microsoft Intune with Apple's iTunes, leading them to add an 's' and call it 'Intunes'. The correct product name is 'Intune' or 'Microsoft Intune'."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <style>
     /* ── Fluent Design tokens ─────────────────────────────────────────── */
@@ -287,7 +336,7 @@
         <p id="pledgeMsg" role="status" aria-live="polite"></p>
       </div>
       <div class="hero-img">
-        <img src="images/Bart-ItsIntune-notIntunes.png" alt="Bart says: It's Intune, not Intunes!">
+        <img src="images/Bart-ItsIntune-notIntunes.png" alt="Bart says: It's Intune, not Intunes!" fetchpriority="high" decoding="async">
       </div>
     </section>
 
@@ -331,10 +380,13 @@
 
     </section>
 
-    <footer>
-      <p class="footer-text">Built for fun by <a href="https://scloud.work" target="_blank" rel="noopener">scloud.work</a>. Parody only. Need Intune help? Call Microsoft. Need iTunes? You'll need a time machine: macOS pre-2019, Windows pre-2024.</p>
-    </footer>
   </main>
+
+  <footer>
+    <div class="container">
+      <p class="footer-text">Built for fun by <a href="https://scloud.work" target="_blank" rel="noopener noreferrer">scloud.work</a>. Parody only. Need Intune help? Call Microsoft. Need iTunes? You'll need a time machine: macOS pre-2019, Windows pre-2024.</p>
+    </div>
+  </footer>
 
   <div id="certModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="certTitle">
     <div class="modal-box">
