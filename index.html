@@ -399,121 +399,144 @@
       generateCertificate(name);
     });
 
-    function certRoundRect(ctx, x, y, w, h, r) {
-      ctx.beginPath();
-      ctx.moveTo(x + r, y);
-      ctx.lineTo(x + w - r, y);
-      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-      ctx.lineTo(x + w, y + h - r);
-      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-      ctx.lineTo(x + r, y + h);
-      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-      ctx.lineTo(x, y + r);
-      ctx.quadraticCurveTo(x, y, x + r, y);
-      ctx.closePath();
+    function escapeHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
     function generateCertificate(name) {
-      const W = 1600, H = 1100;
-      const canvas = document.createElement('canvas');
-      canvas.width = W; canvas.height = H;
-      const ctx = canvas.getContext('2d');
-
-      // Background
-      const bg = ctx.createLinearGradient(0, 0, W, H);
-      bg.addColorStop(0, '#0d1020'); bg.addColorStop(1, '#141733');
-      ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-
-      // Purple glow top-left
-      const g1 = ctx.createRadialGradient(0, 0, 0, 0, 0, 900);
-      g1.addColorStop(0, 'rgba(124,92,255,.22)'); g1.addColorStop(1, 'transparent');
-      ctx.fillStyle = g1; ctx.fillRect(0, 0, W, H);
-
-      // Cyan glow top-right
-      const g2 = ctx.createRadialGradient(W, 0, 0, W, 0, 900);
-      g2.addColorStop(0, 'rgba(35,210,255,.17)'); g2.addColorStop(1, 'transparent');
-      ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
-
-      // Outer border (purple)
-      ctx.strokeStyle = '#7c5cff'; ctx.lineWidth = 5;
-      certRoundRect(ctx, 28, 28, W - 56, H - 56, 22); ctx.stroke();
-
-      // Inner border (cyan)
-      ctx.strokeStyle = '#23d2ff'; ctx.lineWidth = 1.5;
-      certRoundRect(ctx, 44, 44, W - 88, H - 88, 16); ctx.stroke();
-
-      // Header band
-      const hg = ctx.createLinearGradient(0, 0, W, 0);
-      hg.addColorStop(0, 'rgba(124,92,255,.13)');
-      hg.addColorStop(.5, 'rgba(35,210,255,.13)');
-      hg.addColorStop(1, 'rgba(124,92,255,.13)');
-      ctx.fillStyle = hg;
-      certRoundRect(ctx, 60, 60, W - 120, 185, 10); ctx.fill();
-
-      // Shield icon
-      ctx.font = '72px serif'; ctx.textAlign = 'center';
-      ctx.fillText('🛡️', W / 2, 158);
-
-      // Title
-      ctx.font = 'bold 68px Georgia, serif'; ctx.fillStyle = '#e9ecff';
-      ctx.fillText('Certificate of Intune Literacy', W / 2, 308);
-
-      // Gradient divider helper
-      function drawDivider(y, x0, x1) {
-        const dg = ctx.createLinearGradient(x0, 0, x1, 0);
-        dg.addColorStop(0, 'transparent'); dg.addColorStop(.15, '#7c5cff');
-        dg.addColorStop(.85, '#23d2ff'); dg.addColorStop(1, 'transparent');
-        ctx.strokeStyle = dg; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
-      }
-      drawDivider(352, 200, W - 200);
-
-      // "This certifies that"
-      ctx.font = 'italic 34px Georgia, serif'; ctx.fillStyle = '#b6b9d8';
-      ctx.fillText('This certifies that', W / 2, 422);
-
-      // Name — auto-size and gradient
-      let namePx = Math.min(90, Math.max(40, Math.floor(1700 / Math.max(name.length, 3))));
-      ctx.font = `bold ${namePx}px Georgia, serif`;
-      while (ctx.measureText(name).width > W - 180 && namePx > 28) {
-        namePx -= 2;
-        ctx.font = `bold ${namePx}px Georgia, serif`;
-      }
-      const ng = ctx.createLinearGradient(W * .2, 0, W * .8, 0);
-      ng.addColorStop(0, '#7c5cff'); ng.addColorStop(1, '#23d2ff');
-      ctx.fillStyle = ng;
-      ctx.fillText(name, W / 2, 535);
-
-      // Body text
-      ctx.font = '30px ui-sans-serif, Helvetica Neue, Arial, sans-serif'; ctx.fillStyle = '#b6b9d8';
-      ctx.fillText('has demonstrated outstanding ability to distinguish', W / 2, 634);
-      ctx.font = 'bold 32px ui-sans-serif, Helvetica Neue, Arial, sans-serif'; ctx.fillStyle = '#e9ecff';
-      ctx.fillText('Microsoft Intune', W / 2, 680);
-      ctx.font = '30px ui-sans-serif, Helvetica Neue, Arial, sans-serif'; ctx.fillStyle = '#b6b9d8';
-      ctx.fillText('from Apple\'s iTunes — without saying "Intunes" even once.', W / 2, 726);
-
-      drawDivider(792, 300, W - 300);
-
-      // Date
       const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-      ctx.font = '26px ui-sans-serif, Arial, sans-serif'; ctx.fillStyle = '#b6b9d8';
-      ctx.fillText(date, W / 2, 862);
+      const safeName = escapeHtml(name);
+      const html = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Intune Certificate — ${safeName}</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #ddd8f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .cert {
+      background: #fffef9;
+      width: 100%;
+      max-width: 860px;
+      padding: 64px 72px;
+      text-align: center;
+      border: 5px solid #7c5cff;
+      outline: 2px solid #23d2ff;
+      outline-offset: -14px;
+      box-shadow: 0 30px 80px rgba(80,60,180,.2);
+    }
+    .logo { font-size: 52px; margin-bottom: 16px; line-height: 1; }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #1a0f40;
+      margin-bottom: 4px;
+    }
+    .issued-by {
+      font-size: 12px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #7c5cff;
+      margin-bottom: 28px;
+    }
+    .divider {
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #7c5cff 25%, #23d2ff 75%, transparent);
+      margin: 0 auto 28px;
+      width: 70%;
+    }
+    .certifies {
+      font-style: italic;
+      font-size: 20px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    .recipient-name {
+      font-size: clamp(34px, 6vw, 56px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0 0 24px;
+      background: linear-gradient(100deg, #7c5cff, #23d2ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      word-break: break-word;
+    }
+    .body { font-size: 19px; color: #3a3060; line-height: 1.8; }
+    .body strong { color: #1a0f40; }
+    .footer-divider {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #7c5cff 25%, #23d2ff 75%, transparent);
+      margin: 28px auto 24px;
+      width: 50%;
+    }
+    .cert-date { font-size: 15px; color: #999; font-style: italic; margin-bottom: 8px; }
+    .cert-brand { font-size: 20px; font-weight: 700; letter-spacing: 2px; color: #23d2ff; margin-bottom: 6px; }
+    .cert-disclaimer { font-size: 11px; color: #bbb; letter-spacing: .5px; }
+    .actions { margin-top: 32px; display: flex; gap: 12px; justify-content: center; }
+    .btn-print {
+      padding: 12px 28px;
+      background: linear-gradient(100deg, #7c5cff, #23d2ff);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: Georgia, serif;
+    }
+    .btn-print:active { opacity: .85; }
+    @media print {
+      body { background: white; padding: 0; }
+      .actions { display: none; }
+      .cert { box-shadow: none; }
+    }
+    @media (max-width: 600px) {
+      .cert { padding: 40px 24px; }
+      h1 { font-size: 22px; letter-spacing: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cert">
+    <div class="logo">&#x1F6E1;&#xFE0F;</div>
+    <h1>Certificate of Intune Literacy</h1>
+    <p class="issued-by">Issued by intunes.IT</p>
+    <hr class="divider">
+    <p class="certifies">This certifies that</p>
+    <p class="recipient-name">${safeName}</p>
+    <p class="body">has demonstrated outstanding ability to distinguish</p>
+    <p class="body"><strong>Microsoft Intune</strong> from Apple&apos;s iTunes</p>
+    <p class="body">without saying &ldquo;Intunes&rdquo; even once.</p>
+    <hr class="footer-divider">
+    <p class="cert-date">${date}</p>
+    <p class="cert-brand">intunes.IT</p>
+    <p class="cert-disclaimer">It&apos;s Intune, not Intunes. (Not a Microsoft product. Obviously.)</p>
+    <div class="actions">
+      <button class="btn-print" onclick="window.print()">&#x1F5A8; Print / Save as PDF</button>
+    </div>
+  </div>
+</body>
+</html>`;
 
-      // Branding
-      ctx.font = 'bold 34px ui-sans-serif, Arial, sans-serif'; ctx.fillStyle = '#23d2ff';
-      ctx.fillText('intunes.IT', W / 2, 920);
-
-      ctx.font = '21px ui-sans-serif, Arial, sans-serif'; ctx.fillStyle = '#555870';
-      ctx.fillText("It's Intune, not Intunes. (Not a Microsoft product. Obviously.)", W / 2, 966);
-
-      // Trigger download
-      canvas.toBlob(blob => {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.download = `intune-certificate.png`;
-        a.href = url; a.click();
-        setTimeout(() => URL.revokeObjectURL(url), 5000);
-      }, 'image/png');
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
     }
 
   </script>
@@ -525,7 +548,7 @@
       <p class="muted" style="margin:0;font-size:15px">10 correct answers in a row — including at least one correct spelling spotted. You've earned this very official certificate.</p>
       <input class="cert-input" type="text" id="certName" placeholder="Enter your name" maxlength="60" autocomplete="off" />
       <div class="modal-actions">
-        <button class="btn" id="downloadCertBtn">⬇ Download Certificate</button>
+        <button class="btn" id="downloadCertBtn">Open Certificate →</button>
         <button class="btn secondary" id="closeCertBtn">Maybe later</button>
       </div>
     </div>
