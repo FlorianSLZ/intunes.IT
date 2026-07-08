@@ -572,105 +572,332 @@
     }
 
     function buildCertHtml(name) {
-      const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      const now = new Date();
+      const date = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      const mmdd = `${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+      const randChars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      const rand5 = Array.from({ length: 5 }, () => randChars[Math.floor(Math.random() * randChars.length)]).join('');
+      const initials = (name.match(/[A-Za-z0-9]+/g) || ['ANON']).map(w => w[0].toUpperCase()).join('').slice(0, 6) || 'ANON';
       const safeName = escapeHtml(name);
       return `<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Intune Certificate — ${safeName}</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #ddd8f5;
-      display: flex;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Certificate of Intune Literacy - ${safeName}</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", "SegoeUI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #ffffff;
+    background-color: #f5f5f5;
+  }
+
+  .credential-hero-background {
+    background: repeating-linear-gradient(
+      45deg,
+      #1a3a6b,
+      #1a3a6b 20px,
+      #22467d 20px,
+      #22467d 40px
+    );
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    min-height: 100vh;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .credential-hero-inner {
+    background-color: #1b1b1b;
+    border-radius: 12px;
+    padding: 48px 56px;
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #2b9cf0;
+  }
+
+  .credential-hero-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+  }
+
+  .brand-logo .shield {
+    width: 36px;
+    height: 42px;
+  }
+
+  .brand-logo .dot {
+    color: #2b9cf0;
+  }
+
+  .brand-tagline {
+    margin-top: 6px;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #2b9cf0;
+  }
+
+  .credential-hero-body {
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .credential-hero-body p.subtitle {
+    font-size: 15px;
+    margin: 0 0 16px 0;
+    color: #b8b8b8;
+    font-style: italic;
+  }
+
+  .credential-hero-body h3.name {
+    font-size: 34px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    color: #2b9cf0;
+    letter-spacing: 0.5px;
+  }
+
+  .credential-hero-body .achievement {
+    font-size: 16px;
+    margin: 0 auto 24px auto;
+    color: #e6e6e6;
+    max-width: 720px;
+    line-height: 1.8;
+  }
+
+  .credential-hero-body .achievement strong {
+    color: #ffffff;
+  }
+
+  .credential-hero-body h3.certname {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 8px 0 0 0;
+    color: #ffffff;
+  }
+
+  .credential-hero-footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid #333;
+    width: 100%;
+    font-size: 13px;
+    gap: 16px;
+  }
+
+  .credential-hero-footer .column {
+    flex: 1;
+  }
+
+  .credential-hero-footer .column p {
+    margin: 4px 0;
+    color: #cccccc;
+  }
+
+  .credential-hero-footer .center-column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .credential-hero-footer .center-column .seal {
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #2b9cf0, #0d5aa7);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    border: 3px solid #ffffff;
+  }
+
+  .credential-hero-footer .center-column .seal .seal-top {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    opacity: 0.9;
+  }
+
+  .credential-hero-footer .center-column .seal .seal-main {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 4px 0;
+    letter-spacing: 1px;
+  }
+
+  .credential-hero-footer .center-column .seal .seal-bottom {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+
+  .credential-hero-footer .signature-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .signature-line {
+    font-family: "Brush Script MT", "Segoe Script", cursive;
+    font-size: 28px;
+    color: #ffffff;
+    border-bottom: 1px solid #666;
+    padding: 0 20px 4px 20px;
+    margin-bottom: 6px;
+    transform: rotate(-3deg);
+  }
+
+  .signature-name {
+    font-size: 12px;
+    color: #b8b8b8;
+    letter-spacing: 0.5px;
+  }
+
+  .verifiable-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #0f6cbd;
+    color: #ffffff;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+
+  .verifiable-badge::before {
+    content: "\\2713";
+    font-weight: 700;
+  }
+
+  .actions {
+    margin-top: 32px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .btn-print {
+    padding: 10px 28px;
+    background-color: #0f6cbd;
+    border: none;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-print:hover {
+    background-color: #2b9cf0;
+  }
+
+  @media (max-width: 768px) {
+    .credential-hero-inner { padding: 24px; }
+    .credential-hero-footer {
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 40px 20px;
-      font-family: Georgia, 'Times New Roman', serif;
-    }
-    .cert {
-      background: #fffef9;
-      width: 100%;
-      max-width: 860px;
-      padding: 64px 72px;
       text-align: center;
-      border: 5px solid #0078D4;
-      outline: 2px solid #23d2ff;
-      outline-offset: -14px;
-      box-shadow: 0 30px 80px rgba(0,120,212,.15);
     }
-    .logo { font-size: 52px; margin-bottom: 16px; line-height: 1; }
-    h1 {
-      font-size: 28px; font-weight: 700;
-      letter-spacing: 4px; text-transform: uppercase;
-      color: #1a0f40; margin-bottom: 4px;
-    }
-    .issued-by {
-      font-size: 12px; letter-spacing: 6px; text-transform: uppercase;
-      color: #0078D4; margin-bottom: 28px;
-    }
-    .divider {
-      border: none; height: 2px;
-      background: linear-gradient(90deg, transparent, #0078D4 25%, #23d2ff 75%, transparent);
-      margin: 0 auto 28px; width: 70%;
-    }
-    .certifies { font-style: italic; font-size: 20px; color: #666; margin-bottom: 10px; }
-    .recipient-name {
-      font-size: clamp(34px, 6vw, 56px); font-weight: 700; line-height: 1.2;
-      margin: 0 0 24px;
-      background: linear-gradient(100deg, #0078D4, #23d2ff);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      word-break: break-word;
-    }
-    .body { font-size: 19px; color: #3a3060; line-height: 1.8; }
-    .body strong { color: #1a0f40; }
-    .footer-divider {
-      border: none; height: 1px;
-      background: linear-gradient(90deg, transparent, #0078D4 25%, #23d2ff 75%, transparent);
-      margin: 28px auto 24px; width: 50%;
-    }
-    .cert-date { font-size: 15px; color: #999; font-style: italic; margin-bottom: 8px; }
-    .cert-brand { font-size: 20px; font-weight: 700; letter-spacing: 2px; color: #0078D4; margin-bottom: 6px; }
-    .cert-disclaimer { font-size: 11px; color: #bbb; letter-spacing: .5px; }
-    .actions { margin-top: 32px; display: flex; gap: 12px; justify-content: center; }
-    .btn-print {
-      padding: 10px 28px; background: #0078D4; border: none;
-      border-radius: 4px; color: #fff; font-size: 14px; font-weight: 600;
-      cursor: pointer; font-family: 'Segoe UI', sans-serif; letter-spacing: .3px;
-    }
-    .btn-print:hover { background: #106EBE; }
-    @media print {
-      body { background: white; padding: 0; }
-      .actions { display: none; }
-      .cert { box-shadow: none; }
-    }
-    @media (max-width: 600px) {
-      .cert { padding: 40px 24px; }
-      h1 { font-size: 22px; letter-spacing: 2px; }
-    }
-  </style>
+    .credential-hero-footer .signature-column { align-items: center; }
+    .credential-hero-body h3.name { font-size: 26px; }
+  }
+
+  @media print {
+    body { background: none; }
+    .credential-hero-background { min-height: auto; padding: 0; background: #1a3a6b; }
+    .actions { display: none; }
+  }
+</style>
 </head>
 <body>
-  <div class="cert">
-    <div class="logo">&#x1F6E1;&#xFE0F;</div>
-    <h1>Certificate of Intune Literacy</h1>
-    <p class="issued-by">Issued by intunes.IT</p>
-    <hr class="divider">
-    <p class="certifies">This certifies that</p>
-    <p class="recipient-name">${safeName}</p>
-    <p class="body">has demonstrated outstanding ability to distinguish</p>
-    <p class="body"><strong>Microsoft Intune</strong> from Apple&apos;s iTunes</p>
-    <p class="body">without saying &ldquo;Intunes&rdquo; even once.</p>
-    <hr class="footer-divider">
-    <p class="cert-date">${date}</p>
-    <p class="cert-brand">intunes.IT</p>
-    <p class="cert-disclaimer">It&apos;s Intune, not Intunes. (Not a Microsoft product. Obviously.)</p>
-    <div class="actions">
-      <button class="btn-print" onclick="window.print()">&#x1F5A8; Print / Save as PDF</button>
+  <div class="credential-hero-background">
+    <div class="credential-hero-inner">
+
+      <div class="credential-hero-header">
+        <div class="brand-logo">
+          <svg class="shield" viewBox="0 0 36 42" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 2 L34 8 V22 C34 32 26 38 18 40 C10 38 2 32 2 22 V8 Z"
+                  fill="#2b9cf0" stroke="#ffffff" stroke-width="1.5"/>
+            <path d="M18 2 L2 8 V22 C2 32 10 38 18 40 Z"
+                  fill="#0d5aa7" opacity="0.6"/>
+          </svg>
+          <span>intunes<span class="dot">.</span>IT</span>
+        </div>
+        <div class="brand-tagline">Independent Community Credential</div>
+      </div>
+
+      <div class="credential-hero-body">
+        <p class="subtitle">This certifies that</p>
+        <h3 class="name">${safeName}</h3>
+        <p class="achievement">
+          has demonstrated outstanding ability to distinguish
+          <strong>Microsoft Intune</strong> from Apple&apos;s iTunes
+          without saying &ldquo;Intunes&rdquo; even once.
+        </p>
+        <h3 class="certname">Certificate of Intune Literacy</h3>
+      </div>
+
+      <div class="credential-hero-footer">
+        <div class="column">
+          <p>Credential ID: INT-UNE-${now.getFullYear()}-${mmdd}-${rand5}</p>
+          <p>Certification number: ${initials}-INTUNES-IT-${rand5}</p>
+          <p>Earned on: ${date}</p>
+          <p>Expires on: Never (once you know, you know)</p>
+          <span class="verifiable-badge">Community Verifiable</span>
+        </div>
+
+        <div class="column center-column">
+          <div class="seal">
+            <div class="seal-top">intunes.IT</div>
+            <div class="seal-main">CERTIFIED</div>
+            <div class="seal-bottom">Not a Microsoft product</div>
+          </div>
+        </div>
+
+        <div class="column signature-column">
+          <div class="signature-line">intunes.IT</div>
+          <div class="signature-name">issued by intunes.IT</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-print" onclick="window.print()">&#x1F5A8; Print / Save as PDF</button>
+      </div>
+
     </div>
   </div>
 </body>
