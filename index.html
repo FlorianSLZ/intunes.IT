@@ -252,8 +252,8 @@
     }
     #quizWord { font-size: 18px; font-weight: 600; color: var(--ink); }
     .quiz-actions { display: flex; gap: 8px; }
-    #quizFeedback { font-size: 12px; min-height: 16px; margin-top: 4px; }
-    .streak-bar { font-size: 12px; color: var(--primary); font-weight: 600; min-height: 16px; margin-top: 2px; }
+    #quizFeedback { font-size: 12px; line-height: 16px; height: 16px; margin-top: 4px; overflow: hidden; }
+    .streak-bar { font-size: 12px; line-height: 16px; height: 16px; color: var(--primary); font-weight: 600; margin-top: 2px; overflow: hidden; }
 
     /* ── Chips (Hall of misspellings) ─────────────────────────────────── */
     .ghost-btn {
@@ -277,7 +277,14 @@
       background: var(--danger); opacity: 0; pointer-events: none; z-index: 9999;
     }
     body.wrong::before { animation: pulseWrongPage .8s ease; }
-    @media (prefers-reduced-motion: reduce) { body.wrong::before { animation: none; } }
+    @keyframes pulseWrongPageReduced {
+      0%   { opacity: 0; }
+      50%  { opacity: .3; }
+      100% { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body.wrong::before { animation: pulseWrongPageReduced .4s ease; }
+    }
 
     /* ── Certificate modal ────────────────────────────────────────────── */
     .modal-overlay {
