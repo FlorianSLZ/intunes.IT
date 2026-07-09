@@ -68,6 +68,7 @@
     "url": "https://intunes.it",
     "description": "A lovingly snarky PSA correcting the common mistake of calling Microsoft Intune \"Intunes\".",
     "image": "https://intunes.it/images/Bart-ItsIntune-notIntunes.png",
+    "dateModified": "2026-07-09",
     "publisher": {
       "@type": "Organization",
       "name": "scloud.work",
@@ -395,7 +396,7 @@
       <div>
         <div class="psa-bar">🚨 Public Service Announcement &nbsp;·&nbsp; for the love of endpoints</div>
         <h1>It's <span class="mark-good">Intune</span>,<br>not <span class="mark-bad">Intunes</span>.</h1>
-        <p class="hero-body"><strong>Confused?</strong><br>You're not alone. People keep saying "Microsoft Intunes" because of Apple's iTunes. But they couldn't be more different. One is a cloud-based device management platform that keeps your corporate fleet secure and compliant, and the other made you burn mix CDs in 2006. Every time someone types "Intunes" in a support ticket, an IT admin loses a year of their life.</p>
+        <p class="hero-body"><strong>Confused?</strong><br>Microsoft Intune is a cloud-based device management platform that manages and secures corporate devices, apps, and data — it keeps your fleet compliant. It has nothing to do with Apple's iTunes, the app that made you burn mix CDs in 2006, yet people keep saying "Microsoft Intunes" anyway. Every time someone types "Intunes" in a support ticket, an IT admin loses a year of their life.</p>
         <div class="cta">
           <button class="btn btn-primary" id="pledgeBtn">I solemnly swear to say "Microsoft Intune"</button>
           <button class="btn btn-secondary" id="copyBtn">Copy the correct name</button>
@@ -419,6 +420,7 @@
           <li><strong style="color:var(--ink)">Apple iTunes</strong> is a classic media app for <em>playing</em>, <em>purchasing</em>, and <em>syncing</em> music and videos. Great for nostalgia, not so great for deploying a configuration profile.</li>
         </ul>
         <p style="margin-top:12px; font-size:13px; color:var(--ink-muted)">Both names sound nearly identical and both come from tech giants — but the similarity ends there. Getting the name right matters in practice: a support ticket or Copilot prompt referencing "Intunes" can land in the wrong context and waste everyone's time.</p>
+        <p style="margin-top:8px; font-size:12px; color:var(--ink-subdued)">Don't take our word for it: <a href="https://learn.microsoft.com/mem/intune/" target="_blank" rel="noopener noreferrer">read Microsoft's official Intune documentation</a>.</p>
         <div class="divider"></div>
         <div class="marquee" aria-hidden="true">
           <div class="marquee-track" id="typoTrack1"></div>
@@ -456,6 +458,24 @@
         <div style="display:flex; gap:8px; flex-wrap:wrap" id="chips"></div>
       </article>
 
+      <article class="card wide">
+        <h2 class="card-title">Frequently Asked (and Mildly Enraging) Questions</h2>
+        <div style="display:flex; flex-direction:column; gap:16px">
+          <div>
+            <h3 style="font-size:14px; font-weight:600; color:var(--ink); margin-bottom:4px">What is Microsoft Intune?</h3>
+            <p style="font-size:13px; color:var(--ink-muted); line-height:1.6">Microsoft Intune is a cloud-based MDM/MAM service to manage and secure devices, apps, and data. It handles policies, compliance, enrollment, and remediation. It is an enterprise platform, not a media player.</p>
+          </div>
+          <div>
+            <h3 style="font-size:14px; font-weight:600; color:var(--ink); margin-bottom:4px">What is the difference between Intune and iTunes?</h3>
+            <p style="font-size:13px; color:var(--ink-muted); line-height:1.6">Microsoft Intune is an enterprise device management cloud service. Apple iTunes is a media application for playing, purchasing, and syncing music and videos. They are completely unrelated products from different companies.</p>
+          </div>
+          <div>
+            <h3 style="font-size:14px; font-weight:600; color:var(--ink); margin-bottom:4px">Why do people say Intunes instead of Intune?</h3>
+            <p style="font-size:13px; color:var(--ink-muted); line-height:1.6">People commonly confuse Microsoft Intune with Apple's iTunes, leading them to add an "s" and call it "Intunes". The correct product name is "Intune" or "Microsoft Intune".</p>
+          </div>
+        </div>
+      </article>
+
     </section>
 
   </main>
@@ -463,6 +483,7 @@
   <footer>
     <div class="container">
       <p class="footer-text">Built for fun by <a href="https://scloud.work" target="_blank" rel="noopener noreferrer">scloud.work</a>. Parody only. Need Intune help? Call Microsoft. Need iTunes? You'll need a time machine: macOS pre-2019, Windows pre-2024.</p>
+      <p class="footer-text" style="margin-top:4px">Last fact-checked: July 2026. Still not "Intunes".</p>
     </div>
   </footer>
 
