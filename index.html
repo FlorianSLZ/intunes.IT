@@ -587,21 +587,112 @@
 <title>Certificate of Intune Literacy - ${safeName}</title>
 <style>
   * { box-sizing: border-box; }
+
+  :root {
+    --bg-stripe-a: #1a3a6b;
+    --bg-stripe-b: #22467d;
+    --card-bg: #1b1b1b;
+    --card-border: #2b9cf0;
+    --text-primary: #ffffff;
+    --text-muted: #b8b8b8;
+    --text-achievement: #e6e6e6;
+    --accent: #2b9cf0;
+    --footer-border: #333333;
+    --footer-text: #cccccc;
+    --sig-border: #666666;
+    --toolbar-bg: rgba(27, 27, 27, 0.75);
+    --toolbar-border: rgba(255, 255, 255, 0.18);
+  }
+
+  :root[data-theme="light"] {
+    --bg-stripe-a: #faf9f8;
+    --bg-stripe-b: #eaf2fb;
+    --card-bg: #ffffff;
+    --card-border: #0078d4;
+    --text-primary: #201f1e;
+    --text-muted: #605e5c;
+    --text-achievement: #3d3d3d;
+    --accent: #0078d4;
+    --footer-border: #e1dfdd;
+    --footer-text: #605e5c;
+    --sig-border: #a19f9d;
+    --toolbar-bg: rgba(255, 255, 255, 0.8);
+    --toolbar-border: rgba(0, 0, 0, 0.1);
+  }
+
   html, body {
     margin: 0;
     padding: 0;
     font-family: "Segoe UI", "SegoeUI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
-    color: #ffffff;
+    color: var(--text-primary);
     background-color: #f5f5f5;
+  }
+
+  .cert-toolbar {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px;
+    background: var(--toolbar-bg);
+    border: 1px solid var(--toolbar-border);
+    border-radius: 999px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  }
+
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 17px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 120ms ease;
+  }
+
+  .theme-toggle:hover {
+    background: color-mix(in oklab, var(--text-primary) 15%, transparent);
+  }
+
+  .toolbar-print {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 16px;
+    height: 36px;
+    background-color: #0f6cbd;
+    border: none;
+    border-radius: 999px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+
+  .toolbar-print:hover {
+    background-color: #2b9cf0;
   }
 
   .credential-hero-background {
     background: repeating-linear-gradient(
       45deg,
-      #1a3a6b,
-      #1a3a6b 20px,
-      #22467d 20px,
-      #22467d 40px
+      var(--bg-stripe-a),
+      var(--bg-stripe-a) 20px,
+      var(--bg-stripe-b) 20px,
+      var(--bg-stripe-b) 40px
     );
     display: flex;
     justify-content: center;
@@ -613,14 +704,14 @@
   }
 
   .credential-hero-inner {
-    background-color: #1b1b1b;
+    background-color: var(--card-bg);
     border-radius: 12px;
     padding: 48px 56px;
     width: 100%;
     max-width: 1100px;
     display: flex;
     flex-direction: column;
-    border: 2px solid #2b9cf0;
+    border: 2px solid var(--card-border);
   }
 
   .credential-hero-header {
@@ -636,7 +727,7 @@
     gap: 12px;
     font-size: 22px;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-primary);
     letter-spacing: 0.5px;
   }
 
@@ -646,7 +737,7 @@
   }
 
   .brand-logo .dot {
-    color: #2b9cf0;
+    color: var(--accent);
   }
 
   .brand-tagline {
@@ -654,7 +745,7 @@
     font-size: 11px;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: #2b9cf0;
+    color: var(--accent);
   }
 
   .credential-hero-body {
@@ -665,7 +756,7 @@
   .credential-hero-body p.subtitle {
     font-size: 15px;
     margin: 0 0 16px 0;
-    color: #b8b8b8;
+    color: var(--text-muted);
     font-style: italic;
   }
 
@@ -673,27 +764,27 @@
     font-size: 34px;
     font-weight: 700;
     margin: 0 0 20px 0;
-    color: #2b9cf0;
+    color: var(--accent);
     letter-spacing: 0.5px;
   }
 
   .credential-hero-body .achievement {
     font-size: 16px;
     margin: 0 auto 24px auto;
-    color: #e6e6e6;
+    color: var(--text-achievement);
     max-width: 720px;
     line-height: 1.8;
   }
 
   .credential-hero-body .achievement strong {
-    color: #ffffff;
+    color: var(--text-primary);
   }
 
   .credential-hero-body h3.certname {
     font-size: 20px;
     font-weight: 700;
     margin: 8px 0 0 0;
-    color: #ffffff;
+    color: var(--text-primary);
   }
 
   .credential-hero-footer {
@@ -703,7 +794,7 @@
     justify-content: space-between;
     margin-top: 40px;
     padding-top: 24px;
-    border-top: 1px solid #333;
+    border-top: 1px solid var(--footer-border);
     width: 100%;
     font-size: 13px;
     gap: 16px;
@@ -715,7 +806,7 @@
 
   .credential-hero-footer .column p {
     margin: 4px 0;
-    color: #cccccc;
+    color: var(--footer-text);
   }
 
   .credential-hero-footer .center-column {
@@ -771,8 +862,8 @@
   .signature-line {
     font-family: "Brush Script MT", "Segoe Script", cursive;
     font-size: 28px;
-    color: #ffffff;
-    border-bottom: 1px solid #666;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--sig-border);
     padding: 0 20px 4px 20px;
     margin-bottom: 6px;
     transform: rotate(-3deg);
@@ -780,7 +871,7 @@
 
   .signature-name {
     font-size: 12px;
-    color: #b8b8b8;
+    color: var(--text-muted);
     letter-spacing: 0.5px;
   }
 
@@ -788,7 +879,7 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background-color: #0f6cbd;
+    background-color: #107c10;
     color: #ffffff;
     padding: 6px 14px;
     border-radius: 999px;
@@ -802,29 +893,6 @@
     font-weight: 700;
   }
 
-  .actions {
-    margin-top: 32px;
-    display: flex;
-    justify-content: center;
-  }
-
-  .btn-print {
-    padding: 10px 28px;
-    background-color: #0f6cbd;
-    border: none;
-    border-radius: 4px;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
-    letter-spacing: 0.3px;
-  }
-
-  .btn-print:hover {
-    background-color: #2b9cf0;
-  }
-
   @media (max-width: 768px) {
     .credential-hero-inner { padding: 24px; }
     .credential-hero-footer {
@@ -834,16 +902,46 @@
     }
     .credential-hero-footer .signature-column { align-items: center; }
     .credential-hero-body h3.name { font-size: 26px; }
+    .cert-toolbar { top: auto; bottom: 16px; right: 16px; }
   }
 
   @media print {
+    @page { size: 297mm 210mm; margin: 6mm; }
+    html, body { height: auto; }
     body { background: none; }
-    .credential-hero-background { min-height: auto; padding: 0; background: #1a3a6b; }
-    .actions { display: none; }
+    .cert-toolbar { display: none; }
+
+    .credential-hero-background {
+      display: block;
+      min-height: 0;
+      height: auto;
+      padding: 0;
+      background: var(--bg-stripe-a);
+    }
+
+    .credential-hero-inner {
+      max-width: none;
+      width: 283mm;
+      height: auto;
+      margin: 0 auto;
+      page-break-inside: avoid;
+    }
+
+    .credential-hero-footer {
+      flex-direction: row !important;
+      align-items: center !important;
+      text-align: left !important;
+    }
+    .credential-hero-footer .signature-column { align-items: flex-end !important; }
   }
 </style>
 </head>
 <body>
+  <div class="cert-toolbar">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light / dark mode" title="Toggle light / dark mode">🌙</button>
+    <button class="toolbar-print" type="button" onclick="window.print()">&#x1F5A8; Print / Save as PDF</button>
+  </div>
+
   <div class="credential-hero-background">
     <div class="credential-hero-inner">
 
@@ -877,7 +975,7 @@
           <p>Certification number: ${initials}-INTUNES-IT-${rand5}</p>
           <p>Earned on: ${date}</p>
           <p>Expires on: Never (once you know, you know)</p>
-          <span class="verifiable-badge">Community Verifiable</span>
+          <span class="verifiable-badge">Community Approved</span>
         </div>
 
         <div class="column center-column">
@@ -894,12 +992,32 @@
         </div>
       </div>
 
-      <div class="actions">
-        <button class="btn-print" onclick="window.print()">&#x1F5A8; Print / Save as PDF</button>
-      </div>
-
     </div>
   </div>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var toggle = document.getElementById('themeToggle');
+      var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      var theme = prefersLight ? 'light' : 'dark';
+
+      function apply() {
+        root.setAttribute('data-theme', theme);
+        toggle.textContent = theme === 'light' ? '🌙' : '☀️';
+        var label = theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode';
+        toggle.setAttribute('aria-label', label);
+        toggle.title = label;
+      }
+
+      toggle.addEventListener('click', function () {
+        theme = theme === 'light' ? 'dark' : 'light';
+        apply();
+      });
+
+      apply();
+    })();
+  <\/script>
 </body>
 </html>`;
     }
