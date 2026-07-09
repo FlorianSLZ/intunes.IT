@@ -1,0 +1,7 @@
+# intunes.IT
+
+> A lovingly snarky PSA correcting the common mistake of calling Microsoft Intune "Intunes". Not affiliated with Microsoft or Apple.
+
+The correct product name is **Intune** or **Microsoft Intune** — never "Intunes". Microsoft Intune is a cloud-based MDM/MAM service for managing and securing devices, apps, and data. It is unrelated to Apple's iTunes, a media application for playing, purchasing, and syncing music and videos. The two are frequently confused because the names sound alike, but they are different products from different companies.
+
+Built for fun by [scloud.work](https://scloud.work). Parody content; not official Microsoft or Apple documentation.

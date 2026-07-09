@@ -16,13 +16,13 @@
   <meta property="og:url"         content="https://intunes.it" />
   <meta property="og:site_name"   content="intunes.IT" />
   <meta property="og:title"       content="It's Intune, not Intunes." />
-  <meta property="og:description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes. Your friendly home of gentle correction and cheeky clarity." />
+  <meta property="og:description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes. Welcome to intunes.IT, the home of gentle correction and cheeky clarity." />
   <meta property="og:image"       content="https://intunes.it/images/Bart-ItsIntune-notIntunes.png" />
 
   <!-- Twitter / X Card -->
   <meta name="twitter:card"        content="summary_large_image" />
   <meta name="twitter:title"       content="It's Intune, not Intunes." />
-  <meta name="twitter:description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes. Your friendly home of gentle correction and cheeky clarity." />
+  <meta name="twitter:description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes. Welcome to intunes.IT, the home of gentle correction and cheeky clarity." />
   <meta name="twitter:image"       content="https://intunes.it/images/Bart-ItsIntune-notIntunes.png" />
 
   <!-- Structured data: FAQ rich result -->
@@ -56,6 +56,22 @@
         }
       }
     ]
+  }
+  </script>
+
+  <!-- Structured data: site entity -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "intunes.IT",
+    "url": "https://intunes.it",
+    "description": "A lovingly snarky PSA correcting the common mistake of calling Microsoft Intune \"Intunes\".",
+    "publisher": {
+      "@type": "Organization",
+      "name": "scloud.work",
+      "url": "https://scloud.work"
+    }
   }
   </script>
 
@@ -363,7 +379,10 @@
   <header>
     <div class="container nav">
       <div class="logo">
-        <img src="images/intune-warning.avif" alt="Intune Warning Logo">
+        <picture>
+          <source srcset="images/intune-warning.avif" type="image/avif">
+          <img src="images/intune-warning.png" alt="Intune Warning Logo" width="512" height="512">
+        </picture>
         <span>intunes.IT</span>
       </div>
     </div>
@@ -382,7 +401,10 @@
         <p id="pledgeMsg" role="status" aria-live="polite"></p>
       </div>
       <div class="hero-img">
-        <img src="images/Bart-ItsIntune-notIntunes.avif" alt="Bart says: It's Intune, not Intunes!" fetchpriority="high" decoding="async">
+        <picture>
+          <source srcset="images/Bart-ItsIntune-notIntunes.avif" type="image/avif">
+          <img src="images/Bart-ItsIntune-notIntunes.png" alt="Bart says: It's Intune, not Intunes!" fetchpriority="high" decoding="async" width="698" height="527">
+        </picture>
       </div>
     </section>
 
