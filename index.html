@@ -483,7 +483,7 @@
   <footer>
     <div class="container">
       <p class="footer-text">Built for fun by <a href="https://scloud.work" target="_blank" rel="noopener noreferrer">scloud.work</a>. Parody only. Need Intune help? Call Microsoft. Need iTunes? You'll need a time machine: macOS pre-2019, Windows pre-2024.</p>
-      <p class="footer-text" style="margin-top:4px">Last fact-checked: July 2026. Still not "Intunes".</p>
+      <p class="footer-text" style="margin-top:4px">Last fact-checked: <span id="lastCheckedDate">July 2026</span>. Still not "Intunes".</p>
     </div>
   </footer>
 
@@ -560,6 +560,10 @@
 
     buildTrack(document.getElementById('typoTrack1'));
     buildTrack(document.getElementById('typoTrack2'));
+
+    // Keep the footer's "last fact-checked" month current for visitors
+    document.getElementById('lastCheckedDate').textContent =
+      new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
     // Fact badges
     const facts = [
