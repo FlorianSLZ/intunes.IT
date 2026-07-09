@@ -219,7 +219,7 @@
       box-shadow: var(--shadow-card);
     }
     .card-title { font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
-    .card.quiz { border: 2px solid var(--primary); box-shadow: var(--shadow-elevated); }
+    .card.quiz { border: 2px solid var(--primary); box-shadow: var(--shadow-elevated); display: flex; flex-direction: column; }
 
     /* ── Divider ──────────────────────────────────────────────────────── */
     .divider { border: none; height: 1px; background: var(--border); margin: 16px 0; }
@@ -317,6 +317,41 @@
     .cert-input:focus { outline: none; border: 2px solid var(--primary); }
     .cert-input::placeholder { color: var(--ink-subdued); }
     .modal-actions { display: flex; gap: 8px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+    .modal-body.rules { text-align: left; }
+    .modal-body.rules ol { padding-left: 20px; line-height: 1.7; }
+    .modal-body.rules li strong { color: var(--ink); }
+    .quiz-footer-links {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      margin-top: auto; padding-top: 16px;
+    }
+    .quiz-help-link {
+      background: none; border: none; cursor: pointer;
+      font: inherit; font-size: 12px; font-weight: 500; color: var(--primary-pressed);
+      text-decoration: underline; padding: 0;
+    }
+    .quiz-help-link:hover { color: var(--primary); }
+    .quiz-footer-sep { font-size: 12px; color: var(--border-strong); }
+
+    /* ── Exam mode ────────────────────────────────────────────────────── */
+    .exam-overlay {
+      display: none; position: fixed; inset: 0; z-index: 9998;
+      background: var(--canvas);
+      align-items: center; justify-content: center; flex-direction: column;
+      padding: 40px 20px;
+    }
+    .exam-overlay.open { display: flex; }
+    .exam-exit {
+      position: absolute; top: 20px; right: 20px;
+      background: var(--surface-1); border: 1px solid var(--border-strong); color: var(--ink-muted);
+      border-radius: var(--radius-md); padding: 8px 14px; font: inherit; font-size: 13px;
+      cursor: pointer; transition: color 100ms, border-color 100ms;
+    }
+    .exam-exit:hover { color: var(--ink); border-color: var(--primary); }
+    .exam-content { max-width: 460px; width: 100%; text-align: center; }
+    .exam-title { font-size: 30px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+    .exam-sub { font-size: 13px; color: var(--ink-muted); margin-bottom: 32px; }
+    .exam-content #quizWord { font-size: 26px; }
+    .exam-content .quiz-row { padding: 20px 18px; }
 
     /* ── Footer ───────────────────────────────────────────────────────── */
     footer { border-top: 1px solid var(--border); padding: 24px 0 48px; margin-top: 8px; }
@@ -372,15 +407,22 @@
       <article class="card quiz">
         <h2 class="card-title">Quiz: Is it Intune?</h2>
         <p style="font-size:13px; color:var(--ink-muted)">Click the correct button depending on whether the word shown is actually Intune.</p>
-        <div class="quiz-row" id="quizRow">
-          <strong id="quizWord">Intune</strong>
-          <div class="quiz-actions">
-            <button class="btn btn-success" data-ans="correct">Right</button>
-            <button class="btn btn-danger" data-ans="wrong">Wrong</button>
+        <div id="quizPlayArea">
+          <div class="quiz-row" id="quizRow">
+            <strong id="quizWord">Intune</strong>
+            <div class="quiz-actions">
+              <button class="btn btn-success" data-ans="correct">Right</button>
+              <button class="btn btn-danger" data-ans="wrong">Wrong</button>
+            </div>
           </div>
+          <p id="quizFeedback"></p>
+          <p id="quizStreak" class="streak-bar"></p>
         </div>
-        <p id="quizFeedback"></p>
-        <p id="quizStreak" class="streak-bar"></p>
+        <div class="quiz-footer-links">
+          <button type="button" class="quiz-help-link" id="examModeBtn">Exam Mode</button>
+          <span class="quiz-footer-sep">·</span>
+          <button type="button" class="quiz-help-link" id="quizHelpBtn" aria-haspopup="dialog">How to play</button>
+        </div>
       </article>
 
       <article class="card">
@@ -410,6 +452,35 @@
         <button class="btn btn-primary" id="downloadCertBtn">Open Certificate →</button>
         <button class="btn btn-secondary" id="closeCertBtn">Maybe later</button>
       </div>
+    </div>
+  </div>
+
+  <div id="quizHelpModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="quizHelpTitle">
+    <div class="modal-box">
+      <div class="modal-icon">📜</div>
+      <h2 class="modal-title" id="quizHelpTitle">How to play</h2>
+      <div class="modal-body rules">
+        <ol>
+          <li>A word flashes up in the quiz box. It's either the real deal or one of the many crimes against naming.</li>
+          <li><strong>Only two spellings are ever correct:</strong> "Intune" and "Microsoft Intune", exactly as written, capital letters included.</li>
+          <li>Hit <strong>Right</strong> if the word shown is one of those two. Hit <strong>Wrong</strong> if it's an "Intunes"-style typo.</li>
+          <li>Every correct call extends your streak. Any miss resets it to zero, no mercy.</li>
+          <li>Reach a <strong>streak of 10</strong> to earn an official Intune Certified certificate, but only once you've correctly identified an actual "Intune" or "Microsoft Intune" as Right along the way. If your streak hits 10 without that, keep going: it won't reset, and the certificate unlocks on the next correct call after you finally spot a real one.</li>
+          <li><strong>Exam Mode</strong> seals you in a distraction-free, full-screen testing chamber. No email, no Slack, no coworker asking if you've "tried the Intunes portal" again. Proctor not included. Calculators, snacks, and mild panic are allowed. Cheating is technically impossible: there's only one correct answer and you already read it above.</li>
+        </ol>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="closeQuizHelpBtn">Got it, let's go</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="examOverlay" class="exam-overlay" role="dialog" aria-modal="true" aria-labelledby="examTitle">
+    <button type="button" class="exam-exit" id="examExitBtn">Exit Exam Mode ✕</button>
+    <div class="exam-content">
+      <h2 class="exam-title" id="examTitle">Intune Exam Mode</h2>
+      <p class="exam-sub">No distractions. No partial credit. Just you and the correct spelling of Intune.</p>
+      <div id="examQuizSlot"></div>
     </div>
   </div>
 
@@ -495,7 +566,7 @@
       if (typeof confetti !== 'function') return;
       const duration = 1500;
       const animationEnd = Date.now() + duration;
-      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 2000 };
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 20000 };
       function randomInRange(min, max) { return Math.random() * (max - min) + min; }
       (function frame() {
         const timeLeft = animationEnd - Date.now();
@@ -554,6 +625,7 @@
 
     // Certificate modal
     function openCertModal() {
+      exitExamMode();
       document.getElementById('certModal').classList.add('open');
       setTimeout(() => document.getElementById('certName').focus(), 80);
       launchConfetti();
@@ -564,7 +636,51 @@
 
     document.getElementById('closeCertBtn').addEventListener('click', closeCertModal);
     document.getElementById('certModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeCertModal(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCertModal(); });
+
+    // Quiz "how to play" modal
+    function openQuizHelpModal() {
+      document.getElementById('quizHelpModal').classList.add('open');
+    }
+    function closeQuizHelpModal() {
+      document.getElementById('quizHelpModal').classList.remove('open');
+    }
+    document.getElementById('quizHelpBtn').addEventListener('click', openQuizHelpModal);
+    document.getElementById('closeQuizHelpBtn').addEventListener('click', closeQuizHelpModal);
+    document.getElementById('quizHelpModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeQuizHelpModal(); });
+
+    // Exam Mode: yanks the quiz into a distraction-free full-screen overlay
+    const examOverlay = document.getElementById('examOverlay');
+    const examQuizSlot = document.getElementById('examQuizSlot');
+    const quizPlayArea = document.getElementById('quizPlayArea');
+    let quizPlayAreaHome = null;
+
+    function enterExamMode() {
+      if (examOverlay.classList.contains('open')) return;
+      quizPlayAreaHome = { parent: quizPlayArea.parentNode, next: quizPlayArea.nextSibling };
+      examQuizSlot.appendChild(quizPlayArea);
+      examOverlay.classList.add('open');
+      // Fullscreen the whole page (not just the overlay) so confetti and the
+      // wrong-answer flash, which live elsewhere in the body, still render on top
+      // instead of being hidden behind the browser's fullscreen top layer.
+      const el = document.documentElement;
+      const req = el.requestFullscreen || el.webkitRequestFullscreen;
+      if (req) req.call(el).catch(() => {});
+    }
+    function exitExamMode() {
+      if (!examOverlay.classList.contains('open')) return;
+      examOverlay.classList.remove('open');
+      if (quizPlayAreaHome) {
+        quizPlayAreaHome.parent.insertBefore(quizPlayArea, quizPlayAreaHome.next);
+        quizPlayAreaHome = null;
+      }
+      if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+      else if (document.webkitFullscreenElement) document.webkitExitFullscreen?.();
+    }
+    document.getElementById('examModeBtn').addEventListener('click', enterExamMode);
+    document.getElementById('examExitBtn').addEventListener('click', exitExamMode);
+    document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) exitExamMode(); });
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeCertModal(); closeQuizHelpModal(); exitExamMode(); } });
     document.getElementById('certName').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('downloadCertBtn').click(); });
     document.getElementById('downloadCertBtn').addEventListener('click', () => {
       const name = document.getElementById('certName').value.trim() || 'An Anonymous Hero';
