@@ -4,24 +4,24 @@
   <meta charset="utf-8" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>It's Intune, not Intunes. | intunes.IT</title>
+  <title>Intune vs Intunes: Which Spelling Is Correct? | intunes.IT</title>
   <meta name="description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes. Welcome to intunes.IT, the home of gentle correction and cheeky clarity." />
   <meta name="color-scheme" content="light">
-  <link rel="canonical" href="https://intunes.it">
+  <link rel="canonical" href="https://intunes.it/">
   <link rel="icon" type="image/x-icon" href="images/intune-warning.ico">
   <link rel="apple-touch-icon" href="images/intune-warning.png">
 
   <!-- Open Graph -->
   <meta property="og:type"        content="website" />
-  <meta property="og:url"         content="https://intunes.it" />
+  <meta property="og:url"         content="https://intunes.it/" />
   <meta property="og:site_name"   content="intunes.IT" />
-  <meta property="og:title"       content="It's Intune, not Intunes." />
+  <meta property="og:title"       content="Intune vs Intunes: Which Spelling Is Correct?" />
   <meta property="og:description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes. Welcome to intunes.IT, the home of gentle correction and cheeky clarity." />
   <meta property="og:image"       content="https://intunes.it/images/Bart-ItsIntune-notIntunes.png" />
 
   <!-- Twitter / X Card -->
   <meta name="twitter:card"        content="summary_large_image" />
-  <meta name="twitter:title"       content="It's Intune, not Intunes." />
+  <meta name="twitter:title"       content="Intune vs Intunes: Which Spelling Is Correct?" />
   <meta name="twitter:description" content="A lovingly snarky PSA: Microsoft Intune ≠ Apple's iTunes. Welcome to intunes.IT, the home of gentle correction and cheeky clarity." />
   <meta name="twitter:image"       content="https://intunes.it/images/Bart-ItsIntune-notIntunes.png" />
 
@@ -30,13 +30,14 @@
   {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    "@id": "https://intunes.it/#faq",
     "mainEntity": [
       {
         "@type": "Question",
         "name": "What is Microsoft Intune?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Microsoft Intune is a cloud-based MDM/MAM service to manage and secure devices, apps, and data. It handles policies, compliance, enrollment, and remediation. It is an enterprise platform, not a media player."
+          "text": "Microsoft Intune is a cloud-based MDM/MAM service to manage and secure devices, apps, and data. It handles policies, compliance, enrollment, and remediation. It is an enterprise platform, not a media player. It's part of the Microsoft Intune Suite (formerly Microsoft Endpoint Manager) and integrates with Microsoft Entra ID for identity-based access control."
         }
       },
       {
@@ -44,7 +45,7 @@
         "name": "What is the difference between Intune and iTunes?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Microsoft Intune is an enterprise device management cloud service. Apple iTunes is a media application for playing, purchasing, and syncing music and videos. They are completely unrelated products from different companies."
+          "text": "Microsoft Intune is an enterprise device management cloud service. Apple iTunes is a media application for playing, purchasing, and syncing music and videos. They are completely unrelated products from different companies. Confusing them in a support ticket or search query typically routes you to the wrong documentation entirely — Apple's iTunes support pages won't help with an MDM enrollment issue."
         }
       },
       {
@@ -52,29 +53,58 @@
         "name": "Why do people say Intunes instead of Intune?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "People commonly confuse Microsoft Intune with Apple's iTunes, leading them to add an 's' and call it 'Intunes'. The correct product name is 'Intune' or 'Microsoft Intune'."
+          "text": "People commonly confuse Microsoft Intune with Apple's iTunes, leading them to add an 's' and call it 'Intunes'. The correct product name is 'Intune' or 'Microsoft Intune'. There is no official Microsoft product called 'Intunes' — if you see that spelling anywhere, including in a vendor email or job posting, it's simply a typo."
         }
       }
     ]
   }
   </script>
 
-  <!-- Structured data: site entity -->
+  <!-- Structured data: publisher entity -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://scloud.work/#org",
+    "name": "scloud.work",
+    "url": "https://scloud.work",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://intunes.it/images/intune-warning.png",
+      "width": 512,
+      "height": 512
+    }
+  }
+  </script>
+
+  <!-- Structured data: site + page entity -->
+  <script type="application/ld+json" id="websiteSchema">
+  {
+    "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": "https://intunes.it/#website",
     "name": "intunes.IT",
-    "url": "https://intunes.it",
+    "url": "https://intunes.it/",
     "description": "A lovingly snarky PSA correcting the common mistake of calling Microsoft Intune \"Intunes\".",
+    "disambiguatingDescription": "Independent parody and PSA site pointing out a common spelling mistake. Not affiliated with, endorsed by, or sponsored by Microsoft or Apple. \"Intunes\" is not a real product name.",
     "image": "https://intunes.it/images/Bart-ItsIntune-notIntunes.png",
     "dateModified": "2026-07-09",
-    "publisher": {
-      "@type": "Organization",
-      "name": "scloud.work",
-      "url": "https://scloud.work",
-      "logo": "https://intunes.it/images/intune-warning.png"
-    }
+    "publisher": { "@id": "https://scloud.work/#org" }
+  }
+  </script>
+
+  <!-- Structured data: web page entity -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": "https://intunes.it/#webpage",
+    "url": "https://intunes.it/",
+    "name": "Intune vs Intunes: Which Spelling Is Correct?",
+    "isPartOf": { "@id": "https://intunes.it/#website" },
+    "about": { "@id": "https://scloud.work/#org" },
+    "mainEntity": { "@id": "https://intunes.it/#faq" },
+    "inLanguage": "en"
   }
   </script>
 
@@ -227,7 +257,12 @@
     .panel { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; margin-bottom: 32px; }
     .panel > * { grid-column: span 6; }
     .panel .wide { grid-column: span 12; }
-    @media (max-width: 900px) { .panel > * { grid-column: span 12; } }
+    @media (max-width: 900px) {
+      .panel > * { grid-column: span 12; }
+      body { font-size: 16px; }
+      .btn { min-height: 44px; height: auto; padding: 10px 20px; }
+      .quiz-help-link { min-height: 44px; display: inline-flex; align-items: center; padding: 4px 8px; }
+    }
 
     /* ── Card ─────────────────────────────────────────────────────────── */
     .card {
@@ -397,6 +432,7 @@
         <div class="psa-bar">🚨 Public Service Announcement &nbsp;·&nbsp; for the love of endpoints</div>
         <h1>It's <span class="mark-good">Intune</span>,<br>not <span class="mark-bad">Intunes</span>.</h1>
         <p class="hero-body"><strong>Confused?</strong><br>Microsoft Intune is a cloud-based device management platform that manages and secures corporate devices, apps, and data — it keeps your fleet compliant. It has nothing to do with Apple's iTunes, the app that made you burn mix CDs in 2006, yet people keep saying "Microsoft Intunes" anyway. Every time someone types "Intunes" in a support ticket, an IT admin loses a year of their life.</p>
+        <p style="font-size:12px; color:var(--ink-subdued); margin-top:-16px; margin-bottom:24px;">intunes.IT is an independent parody/PSA project — not affiliated with, endorsed by, or sponsored by Microsoft or Apple.</p>
         <div class="cta">
           <button class="btn btn-primary" id="pledgeBtn">I solemnly swear to say "Microsoft Intune"</button>
           <button class="btn btn-secondary" id="copyBtn">Copy the correct name</button>
@@ -453,9 +489,21 @@
 
       <article class="card">
         <h2 class="card-title">Hall of Misspellings <span style="font-size:12px; font-weight:400; color:var(--ink-muted)">(100% real, 1% shame)</span></h2>
-        <p style="font-size:13px; color:var(--ink-muted); margin-bottom:4px">We've seen them all: Intunes, Intunes MDM, Microsoft Intunes, Apple Intune, iToons, InTune (camel case crimes). Click any to correct it.</p>
+        <p style="font-size:13px; color:var(--ink-muted); margin-bottom:4px">We've seen them all: ✗ Intunes, ✗ Intunes MDM, ✗ Microsoft Intunes, ✗ Apple Intune, ✗ iToons, ✗ InTune (camel case crimes). The correct name is always ✓ Microsoft Intune. Click any below to correct it.</p>
         <div class="divider"></div>
         <div style="display:flex; gap:8px; flex-wrap:wrap" id="chips"></div>
+      </article>
+
+      <article class="card wide">
+        <h2 class="card-title">Real sightings in the wild <span style="font-size:12px; font-weight:400; color:var(--ink-muted)">(certified cringe)</span></h2>
+        <p style="font-size:13px; color:var(--ink-muted); margin-bottom:12px">This isn't hypothetical. The "s" creeps in everywhere:</p>
+        <ul style="padding-left:18px; color:var(--ink-muted); line-height:1.9; font-size:13px;">
+          <li>Job postings asking for "3+ years of Intunes administration experience" — recruiters, please.</li>
+          <li>PowerShell script comments like <code style="background:var(--surface-2); padding:1px 6px; border-radius:var(--radius-sm);"># TODO: fix Intunes MDM sync</code> — the script doesn't judge you, but we do.</li>
+          <li>Vendor renewal emails referencing an "Intunes license" — nobody has ever sold you that, because it doesn't exist.</li>
+          <li>Internal wikis and runbooks with a confidently wrong "Intunes Admin Portal" link in the header.</li>
+        </ul>
+        <p style="margin-top:12px; font-size:12px; color:var(--ink-subdued)">✗ Intunes is never correct. ✓ Intune or ✓ Microsoft Intune always is.</p>
       </article>
 
       <article class="card wide">
@@ -463,17 +511,18 @@
         <div style="display:flex; flex-direction:column; gap:16px">
           <div>
             <h3 style="font-size:14px; font-weight:600; color:var(--ink); margin-bottom:4px">What is Microsoft Intune?</h3>
-            <p style="font-size:13px; color:var(--ink-muted); line-height:1.6">Microsoft Intune is a cloud-based MDM/MAM service to manage and secure devices, apps, and data. It handles policies, compliance, enrollment, and remediation. It is an enterprise platform, not a media player.</p>
+            <p style="font-size:13px; color:var(--ink-muted); line-height:1.6">Microsoft Intune is a cloud-based MDM/MAM service to manage and secure devices, apps, and data. It handles policies, compliance, enrollment, and remediation. It is an enterprise platform, not a media player. It's part of the Microsoft Intune Suite (formerly Microsoft Endpoint Manager) and integrates with Microsoft Entra ID for identity-based access control.</p>
           </div>
           <div>
             <h3 style="font-size:14px; font-weight:600; color:var(--ink); margin-bottom:4px">What is the difference between Intune and iTunes?</h3>
-            <p style="font-size:13px; color:var(--ink-muted); line-height:1.6">Microsoft Intune is an enterprise device management cloud service. Apple iTunes is a media application for playing, purchasing, and syncing music and videos. They are completely unrelated products from different companies.</p>
+            <p style="font-size:13px; color:var(--ink-muted); line-height:1.6">Microsoft Intune is an enterprise device management cloud service. Apple iTunes is a media application for playing, purchasing, and syncing music and videos. They are completely unrelated products from different companies. Confusing them in a support ticket or search query typically routes you to the wrong documentation entirely — Apple's iTunes support pages won't help with an MDM enrollment issue.</p>
           </div>
           <div>
             <h3 style="font-size:14px; font-weight:600; color:var(--ink); margin-bottom:4px">Why do people say Intunes instead of Intune?</h3>
-            <p style="font-size:13px; color:var(--ink-muted); line-height:1.6">People commonly confuse Microsoft Intune with Apple's iTunes, leading them to add an "s" and call it "Intunes". The correct product name is "Intune" or "Microsoft Intune".</p>
+            <p style="font-size:13px; color:var(--ink-muted); line-height:1.6">People commonly confuse Microsoft Intune with Apple's iTunes, leading them to add an "s" and call it "Intunes". The correct product name is "Intune" or "Microsoft Intune". There is no official Microsoft product called "Intunes" — if you see that spelling anywhere, including in a vendor email or job posting, it's simply a typo.</p>
           </div>
         </div>
+        <p style="margin-top:16px; font-size:11px; color:var(--ink-subdued)">Verified against <a href="https://learn.microsoft.com/mem/intune/" target="_blank" rel="noopener noreferrer">Microsoft's official Intune documentation</a> by <a href="https://scloud.work" target="_blank" rel="noopener noreferrer">scloud.work</a>. Last checked <span id="faqCheckedDate">July 2026</span>.</p>
       </article>
 
     </section>
@@ -482,7 +531,7 @@
 
   <footer>
     <div class="container">
-      <p class="footer-text">Built for fun by <a href="https://scloud.work" target="_blank" rel="noopener noreferrer">scloud.work</a>. Parody only. Need Intune help? Call Microsoft. Need iTunes? You'll need a time machine: macOS pre-2019, Windows pre-2024.</p>
+      <p class="footer-text">Built, fact-checked, and maintained for fun by <a href="https://scloud.work" target="_blank" rel="noopener noreferrer">scloud.work</a>. Spotted a new "Intunes" sighting or have feedback? Reach out via the link above. Parody only — not affiliated with Microsoft or Apple. Need Intune help? Call Microsoft. Need iTunes? You'll need a time machine: macOS pre-2019, Windows pre-2024.</p>
       <p class="footer-text" style="margin-top:4px">Last fact-checked: <span id="lastCheckedDate">July 2026</span>. Still not "Intunes".</p>
     </div>
   </footer>
@@ -562,8 +611,20 @@
     buildTrack(document.getElementById('typoTrack2'));
 
     // Keep the footer's "last fact-checked" month current for visitors
-    document.getElementById('lastCheckedDate').textContent =
-      new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const checkedLabel = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    document.getElementById('lastCheckedDate').textContent = checkedLabel;
+    const faqCheckedEl = document.getElementById('faqCheckedDate');
+    if (faqCheckedEl) faqCheckedEl.textContent = checkedLabel;
+
+    // Keep the WebSite schema's dateModified in sync with the visible freshness date above
+    const websiteSchemaEl = document.getElementById('websiteSchema');
+    if (websiteSchemaEl) {
+      try {
+        const schema = JSON.parse(websiteSchemaEl.textContent);
+        schema.dateModified = new Date().toISOString().slice(0, 10);
+        websiteSchemaEl.textContent = JSON.stringify(schema);
+      } catch (e) { /* leave schema untouched if parsing fails */ }
+    }
 
     // Fact badges
     const facts = [
@@ -586,10 +647,10 @@
     typos.forEach(word => {
       const btn = document.createElement('button');
       btn.className = 'ghost-btn';
-      btn.textContent = word;
+      btn.textContent = `✗ ${word}`;
       btn.style.borderStyle = 'dashed';
       btn.addEventListener('click', () => {
-        btn.textContent = 'Microsoft Intune ✅';
+        btn.textContent = '✓ Microsoft Intune ✅';
         btn.style.borderColor = 'var(--good)';
       });
       chipBox.appendChild(btn);
