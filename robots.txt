@@ -13,9 +13,6 @@ Allow: /
 User-agent: ClaudeBot
 Allow: /
 
-User-agent: anthropic-ai
-Allow: /
-
 User-agent: PerplexityBot
 Allow: /
 
@@ -24,5 +21,16 @@ Allow: /
 
 User-agent: Bingbot
 Allow: /
+
+# Training-only crawlers (no citation/search benefit to this site) are excluded;
+# the citation/search bots above remain allowed.
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
 
 Sitemap: https://intunes.it/sitemap.xml

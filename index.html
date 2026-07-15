@@ -109,7 +109,6 @@
   </script>
 
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <style>
     /* ── Fluent Design tokens ─────────────────────────────────────────── */
@@ -456,7 +455,7 @@
           <li><strong style="color:var(--ink)">Apple iTunes</strong> is a classic media app for <em>playing</em>, <em>purchasing</em>, and <em>syncing</em> music and videos. Great for nostalgia, not so great for deploying a configuration profile.</li>
         </ul>
         <p style="margin-top:12px; font-size:13px; color:var(--ink-muted)">Both names sound nearly identical and both come from tech giants — but the similarity ends there. Getting the name right matters in practice: a support ticket or Copilot prompt referencing "Intunes" can land in the wrong context and waste everyone's time.</p>
-        <p style="margin-top:8px; font-size:12px; color:var(--ink-subdued)">Don't take our word for it: <a href="https://learn.microsoft.com/mem/intune/" target="_blank" rel="noopener noreferrer">read Microsoft's official Intune documentation</a>.</p>
+        <p style="margin-top:8px; font-size:12px; color:var(--ink-subdued)">Don't take our word for it: <a href="https://learn.microsoft.com/mem/intune/" target="_blank" rel="noopener noreferrer">read Microsoft's official Intune documentation</a> or the <a href="https://en.wikipedia.org/wiki/Microsoft_Intune" target="_blank" rel="noopener noreferrer">Wikipedia entry for Microsoft Intune</a>.</p>
         <div class="divider"></div>
         <div class="marquee" aria-hidden="true">
           <div class="marquee-track" id="typoTrack1"></div>
@@ -671,20 +670,35 @@
       } catch(e) { alert('Copy failed. Please copy manually: Microsoft Intune'); }
     });
 
-    // Confetti helper
+    // Confetti helper — loads canvas-confetti on first use instead of on page load
+    let confettiLoading = null;
+    function loadConfetti() {
+      if (typeof confetti === 'function') return Promise.resolve();
+      if (confettiLoading) return confettiLoading;
+      confettiLoading = new Promise((resolve) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js';
+        s.onload = () => resolve();
+        s.onerror = () => resolve();
+        document.head.appendChild(s);
+      });
+      return confettiLoading;
+    }
     function launchConfetti() {
-      if (typeof confetti !== 'function') return;
-      const duration = 1500;
-      const animationEnd = Date.now() + duration;
-      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 20000 };
-      function randomInRange(min, max) { return Math.random() * (max - min) + min; }
-      (function frame() {
-        const timeLeft = animationEnd - Date.now();
-        if (timeLeft <= 0) return;
-        const particleCount = 50 * (timeLeft / duration);
-        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.9), y: Math.random() - 0.2 } }));
-        requestAnimationFrame(frame);
-      })();
+      loadConfetti().then(() => {
+        if (typeof confetti !== 'function') return;
+        const duration = 1500;
+        const animationEnd = Date.now() + duration;
+        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 20000 };
+        function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+        (function frame() {
+          const timeLeft = animationEnd - Date.now();
+          if (timeLeft <= 0) return;
+          const particleCount = 50 * (timeLeft / duration);
+          confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.9), y: Math.random() - 0.2 } }));
+          requestAnimationFrame(frame);
+        })();
+      });
     }
 
     // Streak tracking
